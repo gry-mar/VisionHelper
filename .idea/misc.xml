@@ -5,7 +5,8 @@
       <map>
         <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_phone.xml" value="0.471875" />
         <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_zoom_icon.xml" value="0.5703125" />
-        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_camera.xml" value="0.33" />
+        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_main.xml" value="0.1" />
       </map>
     </option>
   </component>
