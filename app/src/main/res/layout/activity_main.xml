@@ -1,18 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <ImageButton
+            android:id="@+id/helperButton"
+            android:layout_marginBottom="-60sp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="left"
+            android:src="@drawable/ic_helper"
+            android:background="@color/black"
+            app:tint="@color/blue"
+            />
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_marginBottom="16sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_camera"
+            android:background="@color/black"
+            app:tint="@color/red"
+             />
+
+        <ImageButton
+            android:id="@+id/notesButton"
+            android:layout_marginBottom="16sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_note"
+            android:background="@color/black"
+            app:tint="@color/yellow"
+            />
+
+        <ImageButton
+            android:id="@+id/callButton"
+            android:layout_marginBottom="16sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_phone"
+            android:background="@color/black"
+            app:tint="@color/blue" />
+
+        <ImageButton
+            android:id="@+id/calculatorButton"
+            android:layout_marginBottom="16sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_calculator"
+            android:background="@color/black"
+            app:tint="@color/green"
+            />
+
+        <ImageButton
+            android:id="@+id/zoomTextButton"
+            android:layout_marginBottom="36sp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_zoom_icon"
+            android:background="@color/black"
+            app:tint="@color/pink"
+            />
+
+    </LinearLayout>
+</ScrollView>
