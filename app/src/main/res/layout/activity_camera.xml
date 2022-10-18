@@ -16,8 +16,7 @@
         android:layout_height="110dp"
         android:layout_gravity="left"
         android:src="@drawable/ic_helper"
-        android:background="@color/black"
-        app:tint="@color/blue"
+        android:background="@color/transparent"
         />
 
     <TextView
@@ -42,8 +41,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_play"
-            android:background="@color/black"
-            app:tint="@color/green"
+            android:background="@color/transparent"
             />
         <Space
             android:layout_width="72sp"
@@ -54,8 +52,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_stop"
-            android:background="@color/black"
-            app:tint="@color/red"
+            android:background="@color/transparent"
             />
 
     </LinearLayout>

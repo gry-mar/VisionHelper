@@ -3,10 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_calculator.xml" value="0.5385416666666667" />
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_camera.xml" value="0.5385416666666667" />
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_helper.xml" value="0.5385416666666667" />
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_note.xml" value="0.5385416666666667" />
         <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_phone.xml" value="0.471875" />
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_play.xml" value="0.5385416666666667" />
+        <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_stop.xml" value="0.5385416666666667" />
         <entry key="..\:/visionhelper/app/src/main/res/drawable/ic_zoom_icon.xml" value="0.5703125" />
         <entry key="..\:/visionhelper/app/src/main/res/layout/activity_camera.xml" value="0.33" />
-        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_main.xml" value="0.33" />
       </map>
     </option>
   </component>
