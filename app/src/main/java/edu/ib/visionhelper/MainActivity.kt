@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import edu.ib.visionhelper.camera.CameraActivity
+import edu.ib.visionhelper.notes.NotesActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +15,13 @@ class MainActivity : AppCompatActivity() {
         val cameraButton = findViewById<ImageButton>(R.id.cameraButton)
         cameraButton.setOnClickListener{
             val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
+
+        }
+
+        val notesButton = findViewById<ImageButton>(R.id.notesButton)
+        notesButton.setOnClickListener{
+            val intent = Intent(this, NotesActivity::class.java)
             startActivity(intent)
 
         }
