@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VisionHelper">
         <activity
+            android:name=".call.CallActivity"
+            android:exported="false" />
+        <activity
             android:name=".notes.NotesActivity"
             android:exported="false" />
         <activity

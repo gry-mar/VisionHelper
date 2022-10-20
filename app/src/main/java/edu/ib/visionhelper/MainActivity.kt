@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import edu.ib.visionhelper.call.CallActivity
 import edu.ib.visionhelper.camera.CameraActivity
 import edu.ib.visionhelper.notes.NotesActivity
 
@@ -22,6 +23,13 @@ class MainActivity : AppCompatActivity() {
         val notesButton = findViewById<ImageButton>(R.id.notesButton)
         notesButton.setOnClickListener{
             val intent = Intent(this, NotesActivity::class.java)
+            startActivity(intent)
+
+        }
+
+        val callButton = findViewById<ImageButton>(R.id.callButton)
+        callButton.setOnClickListener{
+            val intent = Intent(this, CallActivity::class.java)
             startActivity(intent)
 
         }
