@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    android:gravity="center"
+    android:layout_gravity="center"
     android:orientation="vertical"
     tools:context=".notes.NotesActivity">
 
     <ImageButton
         android:id="@+id/helperNotesButton"
-        android:layout_width="110dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:background="@color/transparent"
@@ -22,6 +22,7 @@
         android:layout_width="310dp"
         android:layout_height="395dp"
         android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <ListView
@@ -45,6 +46,7 @@
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <ImageButton

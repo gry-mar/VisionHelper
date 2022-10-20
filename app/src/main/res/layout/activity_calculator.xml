@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:gravity="center"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/black"
     tools:context=".calculator.CalculatorActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent">
 
         <ImageButton
             android:id="@+id/helperButton"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:src="@drawable/ic_helper"
             android:background="@color/transparent"
@@ -29,8 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/green"
-            android:layout_marginTop="14dp"
-            android:textSize="64dp"
+            android:layout_weight="1.0"
+            android:textSize="64sp"
             android:text="9*9+10" />
 
         <TextView
@@ -38,9 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/green"
-            android:layout_marginTop="-18dp"
-            android:layout_marginBottom="-18dp"
-            android:textSize="64dp"
+            android:layout_weight="0.5"
+            android:textSize="64sp"
             android:text="=" />
 
         <TextView
@@ -48,19 +42,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/green"
-            android:textSize="100dp"
+            android:layout_weight="1.0"
+            android:textSize="100sp"
             android:text="91" />
 
         <ImageButton
             android:id="@+id/btnSoundCalculator"
             android:layout_marginBottom="20dp"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="34dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:src="@drawable/ic_microphone"
             android:background="@drawable/shape_circle_green"
             />
 
 
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

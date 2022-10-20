@@ -10,10 +10,9 @@
 
     <ImageButton
         android:id="@+id/btnHelperZoomView"
-        android:layout_width="110dp"
-        android:layout_height="110dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="left"
-
         android:background="@color/transparent"
         android:src="@drawable/ic_helper" />
 
@@ -40,8 +39,8 @@
         >
         <ImageButton
             android:id="@+id/btnMakeTextSizeSmallerZoomView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_remove"
             android:background="@color/transparent"
             />
@@ -50,8 +49,8 @@
             android:layout_height="match_parent"/>
         <ImageButton
             android:id="@+id/btnMakeTextSizeLargerZoomView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
             android:background="@color/transparent"
             />
@@ -60,8 +59,8 @@
 
     <ImageButton
         android:id="@+id/btnConfirmTextSizeZoomView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_check"
         android:gravity="center"
         android:layout_gravity="center"
