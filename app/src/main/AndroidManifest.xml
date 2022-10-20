@@ -19,6 +19,12 @@
             android:name=".calculator.CalculatorActivity"
             android:exported="false" />
         <activity
+            android:name=".zoomview.ZoomViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".calculator.CalculatorActivity"
+            android:exported="false" />
+        <activity
             android:name=".call.CallActivity"
             android:exported="false" />
         <activity
