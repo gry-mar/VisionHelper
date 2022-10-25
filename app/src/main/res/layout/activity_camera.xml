@@ -11,7 +11,8 @@
 
     <ImageButton
         android:id="@+id/helperButton"
-        android:layout_marginBottom="-60sp"
+        android:layout_marginBottom="-36sp"
+        android:padding="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -30,14 +31,14 @@
 
     <LinearLayout
         android:layout_width="372dp"
-        android:layout_marginTop="15sp"
+        android:layout_marginTop="16sp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginBottom="16sp"
         android:orientation="horizontal"
         >
         <ImageButton
             android:id="@+id/playButton"
-            android:layout_marginBottom="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_play"
@@ -48,7 +49,6 @@
             android:layout_height="match_parent"/>
         <ImageButton
             android:id="@+id/stopButton"
-            android:layout_marginBottom="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_stop"
