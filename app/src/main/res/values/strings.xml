@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">VisionHelper</string>
+    <string name="main_helper_text">Welcome to app.
+        Press red camera to open reading from camera activity.
+        Press yellow note to open voice notes,
+        blue phone to make a phone call or add new contact.
+        Press green calculator to open voice calculator and pink magnifier to check font size visible for you.
+        You can press any time to blue circle with question mark to get help with application functions.
+    </string>
 </resources>
