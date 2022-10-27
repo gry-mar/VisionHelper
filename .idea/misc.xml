@@ -3,29 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/ic_camera.xml" value="0.128" />
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/ic_check.xml" value="0.1" />
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/ic_helper.xml" value="0.2445" />
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/ic_microphone.xml" value="0.2125" />
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/shape_blue_circle.xml" value="0.2125" />
-        <entry key="..\:/visionHelper/app/src/main/res/drawable/shape_circle_green.xml" value="0.2125" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_calculator.xml" value="0.176" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_call.xml" value="0.176" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_camera.xml" value="0.25416666666666665" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_listview_call_adapter.xml" value="0.25416666666666665" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_listview_notes_adapter.xml" value="0.25416666666666665" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_notes.xml" value="0.25416666666666665" />
-        <entry key="..\:/visionHelper/app/src/main/res/layout/activity_zoom_view.xml" value="0.1828125" />
-        <entry key="..\:/visionhelper/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/IdeaProjects/visionhelper/app/src/main/res/layout/activity_calculator.xml" value="0.1" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
-  </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
-  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="16" project-jdk-type="JavaSDK" />
 </project>

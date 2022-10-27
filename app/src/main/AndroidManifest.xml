@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.ib.visionhelper" >
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,18 +17,6 @@
             android:exported="false" />
         <activity
             android:name=".calculator.CalculatorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".calculator.CalculatorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".zoomview.ZoomViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".calculator.CalculatorActivity"
-            android:exported="false" />
-        <activity
-            android:name=".call.CallActivity"
             android:exported="false" />
         <activity
             android:name=".call.CallActivity"
