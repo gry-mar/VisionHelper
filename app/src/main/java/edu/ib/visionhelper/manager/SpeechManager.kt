@@ -12,7 +12,13 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.calculator.CalculatorActivity
+import edu.ib.visionhelper.call.CallActivity
+import edu.ib.visionhelper.camera.CameraActivity
+import edu.ib.visionhelper.notes.NotesActivity
+import edu.ib.visionhelper.zoomview.ZoomViewActivity
 import java.util.*
 
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
@@ -24,7 +30,6 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var isOptionsFinished = false
 
     init {
-        getDownloadedOptions()
         preferences = PreferencesManager(context)
         textToSpeech = TextToSpeech(context, this)
     }
@@ -61,6 +66,10 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
 
     fun stopSpeaking() {
         textToSpeech.stop()
+    }
+
+    fun shutdownSpeaking() {
+        textToSpeech.stop()
         textToSpeech.shutdown()
     }
 
@@ -87,6 +96,8 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     }
 
     override fun onInit(status: Int) {
+        getDownloadedOptions()
+
         if (status == TextToSpeech.SUCCESS) {
             val result = textToSpeech.setLanguage(Locale.getDefault())
             println(Locale.getDefault())
@@ -96,22 +107,25 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
                 installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
                 context.startActivity(installIntent)
             }
-            if (preferences!!.mainFirstTimeLaunched == 0) {
+
+
+
+            if (preferences!!.mainFirstTimeLaunched == 0 && context is MainActivity) {
                 speakOut(context.getString(R.string.main_helper_text))
                 preferences!!.mainFirstTimeLaunched = 1
-            } else if (preferences!!.cameraFirstTimeLaunched == 0) {
+            } else if (preferences!!.cameraFirstTimeLaunched == 0 && context is CameraActivity) {
                 speakOut(context.getString(R.string.camera_helper_text))
                 preferences!!.cameraFirstTimeLaunched = 1
-            } else if (preferences!!.notesFirstTimeLaunched == 0) {
+            } else if (preferences!!.notesFirstTimeLaunched == 0 && context is NotesActivity) {
                 speakOut(context.getString(R.string.notes_helper_text))
                 preferences!!.notesFirstTimeLaunched = 1
-            } else if (preferences!!.zoomFirstTimeLaunched == 0) {
+            } else if (preferences!!.zoomFirstTimeLaunched == 0 && context is ZoomViewActivity) {
                 speakOut(context.getString(R.string.zoom_helper_text))
                 preferences!!.zoomFirstTimeLaunched = 1
-            } else if (preferences!!.callFirstTimeLaunched == 0) {
+            } else if (preferences!!.callFirstTimeLaunched == 0 && context is CallActivity) {
                 speakOut(context.getString(R.string.call_helper_text))
                 preferences!!.callFirstTimeLaunched = 1
-            } else if (preferences!!.calculatorFirstTimeLaunched == 0) {
+            } else if (preferences!!.calculatorFirstTimeLaunched == 0 && context is CalculatorActivity) {
                 speakOut(context.getString(R.string.calculator_helper_text))
                 preferences!!.calculatorFirstTimeLaunched = 1
             }

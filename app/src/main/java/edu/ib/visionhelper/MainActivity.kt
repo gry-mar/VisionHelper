@@ -65,12 +65,17 @@ class MainActivity : AppCompatActivity(){
             startActivity(Intent(this, CalculatorActivity::class.java))
         }
     }
-    public override fun onStop() {
+    public override fun onDestroy() {
         // Shutdown TTS when
         // activity is paused
-        speechManager.stopSpeaking()
-        super.onStop()
+        speechManager.shutdownSpeaking()
+        super.onDestroy()
 
+    }
+
+    override fun onPause() {
+        speechManager.stopSpeaking()
+        super.onPause()
     }
 
 
