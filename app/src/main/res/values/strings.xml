@@ -2,9 +2,47 @@
     <string name="app_name">VisionHelper</string>
     <string name="main_helper_text">Welcome to app.
         Press red camera to open reading from camera activity.
-        Press yellow note to open voice notes,
+        Press yellow note to open voice notes.
         blue phone to make a phone call or add new contact.
-        Press green calculator to open voice calculator and pink magnifier to check font size visible for you.
-        You can press any time to blue circle with question mark to get help with application functions.
+        Press green calculator to open voice calculator and pink magnifier to check which font size is visible for you.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
+    </string>
+    <string name="calculator_helper_text">This view allows you to calculate simple math equations by speaking.
+        Press the green circle and hold it until you stop telling your equation.
+        It is required to use only two numbers in equation at once, so you cannot say for example four multiple six plus eight.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
+    </string>
+
+    <string name="notes_helper_text">This view allows you to write and manage your own notes by speaking.
+        On the top of the screen there are note titles that you have added before.
+        Select the note you want to hear by pressing one of the note title.
+        After selecting, press the green circle on the left to play the note.
+        If you want to stop assistant to speak, press the red circle on the right.
+        If you want to add a new note, press the yellow circle with plus sign.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
+    </string>
+
+    <string name="camera_helper_text">This view allows you to find the text by using camera which you wish to be read by assistant.
+        Selected area is defined by the red rectangle at the center of the camera.
+        Hold the selected area at the text you want to be played.
+        If there are problems with detecting the text, try to improve the focus or set the flashlight on.
+        Press the green rounded button on the left to play the note.
+        If you want to stop assistant to speak, press the red rounded button on the right.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
+    </string>
+
+    <string name="call_helper_text">This view allows you to call the contact from the list or add a new one by speaking.
+        On the top of the screen there are contacts that you have added before,
+        but at the beginning there is an empty area instead.
+        Select the contact you want to call by pressing at one on the list.
+        After selecting, press the big blue circle to call.
+        If you want to add a new contact, press the green circle with plus sign and tell the assistant its number and name.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
+    </string>
+
+    <string name="zoom_helper_text">This view allows you to adjust the application font size.
+        Scale the font size of the text at the center of the screen by pressing the green plus or blue minus circle.
+        If the font is already visible for you, confirm it by pressing the purple circle on the bottom.
+        Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
     </string>
 </resources>

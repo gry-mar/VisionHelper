@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(){
         preferences = PreferencesManager(applicationContext)
         verifyPermission()
 
-        val helperButton = findViewById<ImageButton>(R.id.helperButton)
+        val helperButton = findViewById<ImageButton>(R.id.mainhelperButton)
         helperButton.setOnClickListener{
                 speechManager.speakOut(getString(R.string.main_helper_text))
         }
@@ -65,11 +65,12 @@ class MainActivity : AppCompatActivity(){
             startActivity(Intent(this, CalculatorActivity::class.java))
         }
     }
-    public override fun onDestroy() {
+    public override fun onStop() {
         // Shutdown TTS when
-        // activity is destroyed
+        // activity is paused
         speechManager.stopSpeaking()
-        super.onDestroy()
+        super.onStop()
+
     }
 
 

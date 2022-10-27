@@ -7,15 +7,16 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.widget.Button
+
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import edu.ib.visionhelper.R
+
+import edu.ib.visionhelper.manager.PreferencesManager
+import edu.ib.visionhelper.manager.SpeechManager
 
 
 class CalculatorActivity : AppCompatActivity(), RecognitionListener {
@@ -25,6 +26,8 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private lateinit var recognizerIntent: Intent
     private lateinit var btnMicrophone : ImageButton
     private var logTag = "VoiceRecognitionActivity"
+    private lateinit var speechManager: SpeechManager
+    private var preferences: PreferencesManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,14 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
                 arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
             println("clicked")
             true
+        }
+
+        speechManager = SpeechManager(this)
+        preferences = PreferencesManager(applicationContext)
+
+        val helperButton = findViewById<ImageButton>(R.id.helperCalculatorButton)
+        helperButton.setOnClickListener{
+            speechManager.speakOut(getString(R.string.calculator_helper_text))
         }
     }
 
@@ -132,4 +143,13 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         }
         returnedText.text = text
     }
+
+
+    public override fun onDestroy() {
+        // Shutdown TTS when
+        // activity is destroyed
+        speechManager.stopSpeaking()
+        super.onDestroy()
+    }
+
 }

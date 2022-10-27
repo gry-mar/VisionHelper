@@ -10,7 +10,7 @@
     tools:context=".camera.CameraActivity">
 
     <ImageButton
-        android:id="@+id/helperButton"
+        android:id="@+id/helperCameraButton"
         android:layout_marginBottom="-36sp"
         android:padding="16sp"
         android:layout_width="wrap_content"
