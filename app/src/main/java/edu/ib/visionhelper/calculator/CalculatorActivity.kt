@@ -59,7 +59,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCalculatorButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.calculator_helper_text), true)
+            speechManager.speakOut(getString(R.string.calculator_helper_text), false)
         }
     }
 

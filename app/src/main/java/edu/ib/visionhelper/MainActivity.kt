@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(){
 
         val helperButton = findViewById<ImageButton>(R.id.mainhelperButton)
         helperButton.setOnClickListener{
-                speechManager.speakOut(getString(R.string.main_helper_text), true)
+                speechManager.speakOut(getString(R.string.main_helper_text), false)
         }
 
         val cameraButton = findViewById<ImageButton>(R.id.cameraButton)

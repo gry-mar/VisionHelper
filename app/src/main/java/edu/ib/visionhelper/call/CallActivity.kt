@@ -24,7 +24,7 @@ class CallActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.call_helper_text), true)
+            speechManager.speakOut(getString(R.string.call_helper_text), false)
         }
 
         listView = findViewById(R.id.listContacts)
