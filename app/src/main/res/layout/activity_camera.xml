@@ -11,7 +11,7 @@
 
     <ImageButton
         android:id="@+id/helperCameraButton"
-        android:layout_marginBottom="-36sp"
+        android:layout_marginBottom="-16sp"
         android:padding="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,14 +20,14 @@
         android:background="@color/transparent"
         />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="308dp"
-        android:layout_height="544dp"
+
+    <androidx.camera.view.PreviewView
         android:layout_weight="1"
-        android:gravity="center"
-        android:text="Camera view will appear here"
-        android:textColor="@color/white" />
+        android:id="@+id/preview_view"
+        android:padding="36sp"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        tools:context=".MainActivity" />
 
     <LinearLayout
         android:layout_width="372dp"

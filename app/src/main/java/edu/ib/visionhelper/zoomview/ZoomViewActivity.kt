@@ -21,7 +21,7 @@ class ZoomViewActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.btnHelperZoomView)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.zoom_helper_text))
+            speechManager.speakOut(getString(R.string.zoom_helper_text), true)
         }
     }
 

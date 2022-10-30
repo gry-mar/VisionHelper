@@ -77,20 +77,24 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
      * Function that reads given text
      * @param text - text to be read
      */
-    fun speakOut(text: String) {
+    fun speakOut(text: String, shouldTranslate: Boolean) {
 
         textToSpeech.setSpeechRate(1.1f)
-        if (TRANSLATION == 1) {
-            engLocaleTranslator.translate(text)
-                .addOnSuccessListener { translatedText ->
-                    textToSpeech.speak(translatedText, TextToSpeech.QUEUE_FLUSH, null, "")
-                }
-                .addOnFailureListener(OnFailureListener {
-                    println("Failed to translate")
-                    textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
-                })
+        if(shouldTranslate) {
+            if (TRANSLATION == 1) {
+                engLocaleTranslator.translate(text)
+                    .addOnSuccessListener { translatedText ->
+                        textToSpeech.speak(translatedText, TextToSpeech.QUEUE_FLUSH, null, "")
+                    }
+                    .addOnFailureListener(OnFailureListener {
+                        println("Failed to translate")
+                        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+                    })
+            } else {
+                Log.d("TTSFailed", "Failed to translate")
+                textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+            }
         } else {
-            Log.d("TTSFailed", "Failed to translate")
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
         }
     }
@@ -111,22 +115,22 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
 
 
             if (preferences!!.mainFirstTimeLaunched == 0 && context is MainActivity) {
-                speakOut(context.getString(R.string.main_helper_text))
+                speakOut(context.getString(R.string.main_helper_text), true)
                 preferences!!.mainFirstTimeLaunched = 1
             } else if (preferences!!.cameraFirstTimeLaunched == 0 && context is CameraActivity) {
-                speakOut(context.getString(R.string.camera_helper_text))
+                speakOut(context.getString(R.string.camera_helper_text), true)
                 preferences!!.cameraFirstTimeLaunched = 1
             } else if (preferences!!.notesFirstTimeLaunched == 0 && context is NotesActivity) {
-                speakOut(context.getString(R.string.notes_helper_text))
+                speakOut(context.getString(R.string.notes_helper_text), true)
                 preferences!!.notesFirstTimeLaunched = 1
             } else if (preferences!!.zoomFirstTimeLaunched == 0 && context is ZoomViewActivity) {
-                speakOut(context.getString(R.string.zoom_helper_text))
+                speakOut(context.getString(R.string.zoom_helper_text), true)
                 preferences!!.zoomFirstTimeLaunched = 1
             } else if (preferences!!.callFirstTimeLaunched == 0 && context is CallActivity) {
-                speakOut(context.getString(R.string.call_helper_text))
+                speakOut(context.getString(R.string.call_helper_text), true)
                 preferences!!.callFirstTimeLaunched = 1
             } else if (preferences!!.calculatorFirstTimeLaunched == 0 && context is CalculatorActivity) {
-                speakOut(context.getString(R.string.calculator_helper_text))
+                speakOut(context.getString(R.string.calculator_helper_text), true)
                 preferences!!.calculatorFirstTimeLaunched = 1
             }
 

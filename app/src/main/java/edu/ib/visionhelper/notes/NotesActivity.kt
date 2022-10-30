@@ -25,7 +25,7 @@ class NotesActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.notes_helper_text))
+            speechManager.speakOut(getString(R.string.notes_helper_text), true)
         }
 
         listView = findViewById(R.id.listNotes)
