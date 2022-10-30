@@ -28,13 +28,13 @@ class CameraActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCameraButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.camera_helper_text), false)
+            speechManager.speakOut(getString(R.string.camera_helper_text))
         }
         if (isAllPermissionsGranted) startCamera() else requestPermissions()
 
         val startSpeakingButton = findViewById<ImageButton>(R.id.playButton)
         startSpeakingButton.setOnClickListener{
-            speechManager.speakOut(textFound, false)
+            speechManager.speakOut(textFound)
         }
 
         val stopSpeakingButton = findViewById<ImageButton>(R.id.stopButton)
