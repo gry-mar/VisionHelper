@@ -45,4 +45,10 @@
         If the font is already visible for you, confirm it by pressing the purple circle on the bottom.
         Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
     </string>
+
+    <string name="lorem_ipsum_text" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="confirm_zoomed_text">Chosen text size is </string>
+    <string name="zoomed_text_too_small">Chosen text size is too small.</string>
+    <string name="zoomed_text_too_big">Chosen text size is too big. </string>
+
 </resources>

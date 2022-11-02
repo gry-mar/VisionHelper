@@ -31,6 +31,11 @@ class PreferencesManager (context: Context){
     var zoomFirstTimeLaunched: Int
         get() = preferences.getInt("zoomLaunch", 0)
         set(value) = preferences.edit().putInt("zoomLaunch", value).apply()
+
+    var textSizeFromZoomView: Float
+        get() = preferences.getFloat("textSize", 34F)
+        set(value) = preferences.edit().putFloat("textSize", value).apply()
+
 }
 
 

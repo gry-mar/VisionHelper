@@ -26,7 +26,8 @@
         android:gravity="center"
         android:layout_weight='0.2'
         android:layout_gravity="center"
-        android:text="Text will appear here BLE BLE BLE BLE BLE BLE BLEBLE BLE BLE BLE BLE BLE BLEBLE BLE BLE BLE BLE BLE BLEBLE BLE BLE BLE BLE BLE BLE BLE BLE BLE BLE BLE BLE BLE"
+        android:text="@string/lorem_ipsum_text"
+        android:ems="15"
         android:textColor="@color/white" />
 
     <LinearLayout
@@ -37,7 +38,7 @@
         android:orientation="horizontal"
         >
         <ImageButton
-            android:id="@+id/btnMakeTextSizeSmallerZoomView"
+            android:id="@+id/btnZoomTextOut"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_remove"
@@ -47,7 +48,7 @@
             android:layout_width="72sp"
             android:layout_height="match_parent"/>
         <ImageButton
-            android:id="@+id/btnMakeTextSizeLargerZoomView"
+            android:id="@+id/btnZoomTextIn"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:src="@drawable/ic_add"
