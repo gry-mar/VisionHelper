@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.manager.CalculatorManager
 
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
@@ -22,12 +23,16 @@ import edu.ib.visionhelper.manager.SpeechManager
 class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private val permission = 100
     private lateinit var returnedText: TextView
+    private lateinit var finalText: TextView
     private lateinit var speech: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
     private lateinit var btnMicrophone : ImageButton
     private var logTag = "VoiceRecognitionActivity"
     private lateinit var speechManager: SpeechManager
+    private lateinit var calculatorManager: CalculatorManager
     private var preferences: PreferencesManager? = null
+    private lateinit var textArray : MutableList<String>
+    private var finalNumber : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,9 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
 
         btnMicrophone = findViewById(R.id.btnSoundCalculator)
         returnedText = findViewById(R.id.tvEquationCalculator)
+        finalText = findViewById(R.id.tvResultCalculator)
+
+        calculatorManager = CalculatorManager();
 
         speech = SpeechRecognizer.createSpeechRecognizer(this)
         Log.i(logTag, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this))
@@ -50,7 +58,6 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
             Toast.makeText(applicationContext, "Button Long Pressed", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(this@CalculatorActivity,
                 arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
-            println("clicked")
             true
         }
 
@@ -142,6 +149,10 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
           """.trimIndent()
         }
         returnedText.text = text
+        println(calculatorManager.textSeparator(text))
+        textArray = calculatorManager.textSeparator(text)
+        finalNumber = calculatorManager.textAnalizer(textArray)
+        finalText.text = finalNumber.toString()
     }
 
 
