@@ -1,15 +1,12 @@
 package edu.ib.visionhelper.zoomview
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.speech.SpeechRecognizer
 import android.widget.ImageButton
 import android.widget.TextView
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
-import edu.ib.visionhelper.manager.ZoomViewManager
 
 class ZoomViewActivity : AppCompatActivity() {
 

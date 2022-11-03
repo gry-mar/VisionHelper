@@ -7,12 +7,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginTop="8sp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8sp"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="35dp"
-            android:layout_height="105dp"
+            android:layout_height="match_parent"
             android:background="@color/yellow"
             android:padding="10dp"
             app:srcCompat="@drawable/ic_square_note" />
@@ -30,7 +32,4 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="15sp" />
 </LinearLayout>

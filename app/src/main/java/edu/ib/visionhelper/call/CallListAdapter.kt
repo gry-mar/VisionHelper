@@ -1,5 +1,6 @@
 package edu.ib.visionhelper.call
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
 class CallListAdapter(
     private val context: Context,
@@ -15,6 +17,14 @@ class CallListAdapter(
 
     private lateinit var contactName: TextView
     private lateinit var contactNumber: TextView
+    private var textPreferences: TextSizePreferencesManager? = null
+    private var textSize: Float
+
+    init {
+        textPreferences = TextSizePreferencesManager(context)
+        textSize = textPreferences!!.textSize
+    }
+
 
     override fun getCount(): Int {
         return arrayList.size
@@ -28,13 +38,16 @@ class CallListAdapter(
         return position.toLong()
     }
 
+    @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val convertView = LayoutInflater.from(context).inflate(
             R.layout.activity_listview_call_adapter,
             parent, false
         )
         contactName = convertView.findViewById(R.id.contactName)
+        contactName.textSize = textSize
         contactNumber = convertView.findViewById(R.id.contactNumber)
+        contactNumber.textSize = textSize
         contactName.text = arrayList[position].contactName
         contactNumber.text = arrayList[position].contactNumber.toString()
 
