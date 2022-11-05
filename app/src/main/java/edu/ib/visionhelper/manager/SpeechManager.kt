@@ -12,10 +12,15 @@ import edu.ib.visionhelper.camera.CameraActivity
 import edu.ib.visionhelper.notes.NotesActivity
 import edu.ib.visionhelper.zoomview.ZoomViewActivity
 import java.util.*
+import android.speech.tts.UtteranceProgressListener
+import com.google.android.gms.tasks.Tasks.await
+
 
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
     private var preferences: PreferencesManager? = null
+    var isFinishedSpeaking: Int = 0
+        private set
 
     init {
         preferences = PreferencesManager(context)
@@ -36,10 +41,27 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
      * Function that reads given text
      * @param text - text to be read
      */
-    fun speakOut(text: String) {
+   fun speakOut(text: String) {
 
         textToSpeech.setSpeechRate(1.1f)
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        textToSpeech.setOnUtteranceProgressListener(object :
+            UtteranceProgressListener() {
+            override fun onStart(utteranceId: String) {
+                Log.i("TextToSpeech", "On Start")
+                isFinishedSpeaking = 0
+            }
+
+            override fun onDone(utteranceId: String) {
+
+                isFinishedSpeaking = 1
+                Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
+            }
+
+            override fun onError(utteranceId: String) {
+
+            }
+        })
 
     }
 
@@ -58,7 +80,7 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
 
 
             if (preferences!!.mainFirstTimeLaunched == 0 && context is MainActivity) {
-                speakOut(context.getString(R.string.main_helper_text))
+               speakOut(context.getString(R.string.main_helper_text))
                 preferences!!.mainFirstTimeLaunched = 1
             } else if (preferences!!.cameraFirstTimeLaunched == 0 && context is CameraActivity) {
                 speakOut(context.getString(R.string.camera_helper_text))

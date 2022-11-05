@@ -9,4 +9,5 @@
     <string name="confirm_zoomed_text">Wybrany rozmiar czcionki to </string>
     <string name="zoomed_text_too_small">Wybrany rozmiar czcionki jest za mały.</string>
     <string name="zoomed_text_too_big">Wybrany rozmiar czcionki jest za duży.</string>
+    <string name="call_to">Dzwonię do kontaktu o nazwie:</string>
 </resources>

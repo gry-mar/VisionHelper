@@ -84,19 +84,18 @@ class MainActivity : AppCompatActivity(){
      */
     private fun verifyPermission() {
         val permissions =
-            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        if (ContextCompat.checkSelfPermission(
-                this.applicationContext,
-                permissions[0]
-            ) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(
-                this.applicationContext,
-                permissions[0]
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            granted = true
-        } else {
-            ActivityCompat.requestPermissions(this@MainActivity, permissions, REQUEST_CODE)
+            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CALL_PHONE, Manifest.permission.RECORD_AUDIO)
+        for(permission in permissions){
+            if (ContextCompat.checkSelfPermission(
+                    this.applicationContext,
+                    permission
+                ) == PackageManager.PERMISSION_GRANTED){
+                granted = true
+            } else {
+                ActivityCompat.requestPermissions(this@MainActivity, permissions, REQUEST_CODE)
+            }
         }
+
     }
 }

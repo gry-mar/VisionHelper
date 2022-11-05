@@ -51,4 +51,7 @@
     <string name="zoomed_text_too_small">Chosen text size is too small.</string>
     <string name="zoomed_text_too_big">Chosen text size is too big. </string>
 
+    <string name="call_to">Calling contact named: </string>
+
+
 </resources>
