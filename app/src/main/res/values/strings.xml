@@ -53,5 +53,6 @@
 
     <string name="call_to">Calling contact named: </string>
 
+    <string name="install_google_app">Cannot bind to speech recognition service. Make sure you have installed Google app.</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package edu.ib.visionhelper.call
 
+import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -8,6 +10,8 @@ import android.widget.ImageButton
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
+
+
 
 class CallActivity : AppCompatActivity(), RecognitionListener {
 
@@ -19,19 +23,22 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         setContentView(R.layout.activity_call)
         viewManager = CallManager(this, this)
 
+        val callButton = findViewById<ImageButton>(R.id.callContactButton)
+        callButton.setOnLongClickListener {
+            viewManager.listen()
+            true
+        }
+
+
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
-        helperButton.setOnClickListener{
+        helperButton.setOnClickListener {
             viewManager.speak(getString(R.string.call_helper_text))
 
-        }
-        val callButton = findViewById<ImageButton>(R.id.callContactButton)
-        callButton.setOnLongClickListener{
-            viewManager.listen()
-           true
         }
 
         listView = findViewById(R.id.listContacts)
         listView.adapter = viewManager.adapter
+
     }
 
     public override fun onDestroy() {
@@ -85,7 +92,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
 
     override fun onResults(results: Bundle?) {
-        viewManager.handleResults(results )
+        viewManager.handleResults(results)
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
@@ -95,4 +102,5 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
     override fun onEvent(eventType: Int, params: Bundle?) {
         Log.i("logTag", "on event")
     }
+
 }

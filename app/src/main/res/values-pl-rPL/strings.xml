@@ -10,4 +10,5 @@
     <string name="zoomed_text_too_small">Wybrany rozmiar czcionki jest za mały.</string>
     <string name="zoomed_text_too_big">Wybrany rozmiar czcionki jest za duży.</string>
     <string name="call_to">Dzwonię do kontaktu o nazwie:</string>
+    <string name="install_google_app">Nie można podłączyć się do serwisu rozpoznawania mowy. Upewnij się, że masz zainstalowaną aplikację Google.</string>
 </resources>

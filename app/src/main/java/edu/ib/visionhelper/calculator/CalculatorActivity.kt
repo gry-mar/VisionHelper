@@ -7,16 +7,14 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
-
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import edu.ib.visionhelper.R
-
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
+import edu.ib.visionhelper.manager.SpeechRecognizerManager
 
 
 class CalculatorActivity : AppCompatActivity(), RecognitionListener {
@@ -24,63 +22,83 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private lateinit var returnedText: TextView
     private lateinit var speech: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
-    private lateinit var btnMicrophone : ImageButton
+    private lateinit var btnMicrophone: ImageButton
     private var logTag = "VoiceRecognitionActivity"
     private lateinit var speechManager: SpeechManager
+    private lateinit var speechRecognizerManager: SpeechRecognizerManager
     private var preferences: PreferencesManager? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
 
-        btnMicrophone = findViewById(R.id.btnSoundCalculator)
-        returnedText = findViewById(R.id.tvEquationCalculator)
-
+        speechRecognizerManager = SpeechRecognizerManager(this)
         speech = SpeechRecognizer.createSpeechRecognizer(this)
-        Log.i(logTag, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this))
-        speech.setRecognitionListener(this)
-        recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "US-en")
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
 
-        btnMicrophone.setOnLongClickListener {
-            returnedText.clearComposingText()
-            Toast.makeText(applicationContext, "Button Long Pressed", Toast.LENGTH_SHORT).show()
-            ActivityCompat.requestPermissions(this@CalculatorActivity,
-                arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
-            println("clicked")
-            true
+        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
+            Toast.makeText(
+                applicationContext,
+                getString(R.string.install_google_app),
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            btnMicrophone = findViewById(R.id.btnSoundCalculator)
+            returnedText = findViewById(R.id.tvEquationCalculator)
+
+            Log.i(
+                logTag,
+                "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(this)
+            )
+            speech.setRecognitionListener(this)
+            recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "US-en")
+            recognizerIntent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
+
+            btnMicrophone.setOnLongClickListener {
+                returnedText.clearComposingText()
+                true
+            }
         }
-
         speechManager = SpeechManager(this)
         preferences = PreferencesManager(applicationContext)
 
         val helperButton = findViewById<ImageButton>(R.id.helperCalculatorButton)
-        helperButton.setOnClickListener{
+        helperButton.setOnClickListener {
             speechManager.speakOut(getString(R.string.calculator_helper_text))
         }
+
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             permission -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager
-                    .PERMISSION_GRANTED) {
+                    .PERMISSION_GRANTED
+            ) {
                 speech.startListening(recognizerIntent)
             } else {
-                Toast.makeText(this@CalculatorActivity, "Permission Denied!",
-                    Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@CalculatorActivity, "Permission Denied!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
+
     override fun onStop() {
         super.onStop()
         speech.destroy()
         Log.i(logTag, "destroy")
     }
+
     override fun onReadyForSpeech(params: Bundle?) {
         Log.i(logTag, "Start")
     }

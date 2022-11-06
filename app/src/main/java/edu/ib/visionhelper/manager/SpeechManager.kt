@@ -20,7 +20,6 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
     private var preferences: PreferencesManager? = null
     var isFinishedSpeaking: Int = 0
-        private set
 
     init {
         preferences = PreferencesManager(context)

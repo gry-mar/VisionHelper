@@ -1,4 +1,4 @@
-package edu.ib.visionhelper.manager
+package edu.ib.visionhelper.calculator
 
 import android.util.Log
 
