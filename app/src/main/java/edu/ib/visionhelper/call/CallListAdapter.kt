@@ -13,15 +13,16 @@ import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
 class CallListAdapter(
-    private val context: Context,
+   private val context: Context,
     private val arrayList: ArrayList<CallListElement>,
+   private val viewManager: CallManager
 ) : BaseAdapter() {
 
     private lateinit var contactName: TextView
     private lateinit var contactNumber: TextView
     private var textPreferences: TextSizePreferencesManager? = null
     private var textSize: Float
-    private lateinit var viewManager: CallManager
+    //private lateinit var viewManager: CallManager
 
     init {
         textPreferences = TextSizePreferencesManager(context)
@@ -48,8 +49,6 @@ class CallListAdapter(
             R.layout.activity_listview_call_adapter,
             parent, false
         )
-        viewManager = CallManager(context, CallActivity())
-
         contactName = convertView.findViewById(R.id.contactName)
         contactName.textSize = textSize
         contactNumber = convertView.findViewById(R.id.contactNumber)

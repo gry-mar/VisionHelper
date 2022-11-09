@@ -57,7 +57,9 @@ class CallManager(context: Context, activity: CallActivity) {
         arrayList.add(CallListElement("Mama", 666666666))
         arrayList.add(CallListElement("Dziadek", 789563124))
         arrayList.add(CallListElement("Lekarz", 609391014))
-        adapter = CallListAdapter(context, arrayList)
+        arrayList.add(CallListElement("Lekarz1", 609391014))
+        arrayList.add(CallListElement("Lekarz2", 609391014))
+        adapter = CallListAdapter(context, arrayList, this)
     }
 
     /**

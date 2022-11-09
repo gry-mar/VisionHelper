@@ -10,6 +10,10 @@ import android.widget.ImageButton
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
+import android.widget.AbsListView
+
+
+
 
 
 
@@ -33,13 +37,20 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
         helperButton.setOnClickListener {
             viewManager.speak(getString(R.string.call_helper_text))
-
         }
 
         listView = findViewById(R.id.listContacts)
         listView.adapter = viewManager.adapter
-
+        listView.setOnScrollListener(object :AbsListView.OnScrollListener {
+            override fun onScroll(p0: AbsListView?, FirstVisibleItem: Int, i2: Int, i3: Int) {
+                viewManager.stopSpeaking()
+            }
+            override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
+                viewManager.stopSpeaking()
+            }
+        })
     }
+
 
     public override fun onDestroy() {
         // Shutdown TTS when
