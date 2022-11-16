@@ -17,7 +17,8 @@ class ZoomViewActivity : AppCompatActivity() {
     private lateinit var btnZoomIn : ImageButton
     private lateinit var btnZoomOut : ImageButton
     private lateinit var btnConfirmTextSize : ImageButton
-
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,19 @@ class ZoomViewActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.btnHelperZoomView)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.zoom_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    speechManager.stopSpeaking()
+                    false
+                } else {
+                    speechManager.speakOut(getString(R.string.zoom_helper_text))
+                    true
+                }
+            }else{
+                speechManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
         }
 
         btnZoomIn.setOnClickListener{

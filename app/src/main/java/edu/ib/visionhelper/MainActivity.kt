@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity(){
     private var preferences: PreferencesManager? = null
     private var granted = false
     private val REQUEST_CODE = 1
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +35,19 @@ class MainActivity : AppCompatActivity(){
 
         val helperButton = findViewById<ImageButton>(R.id.mainhelperButton)
         helperButton.setOnClickListener{
-                speechManager.speakOut(getString(R.string.main_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    speechManager.stopSpeaking()
+                    false
+                } else {
+                    speechManager.speakOut(getString(R.string.main_helper_text))
+                    true
+                }
+            }else{
+                speechManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
         }
 
         val cameraButton = findViewById<ImageButton>(R.id.cameraButton)

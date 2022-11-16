@@ -21,6 +21,8 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
     private lateinit var listView: ListView
     private lateinit var viewManager: CallManager
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +38,19 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
         helperButton.setOnClickListener {
-            viewManager.speak(getString(R.string.call_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    viewManager.stopSpeaking()
+                    false
+                } else {
+                    viewManager.speak(getString(R.string.call_helper_text))
+                    true
+                }
+            }else{
+                viewManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
         }
 
         listView = findViewById(R.id.listContacts)

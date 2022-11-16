@@ -18,6 +18,8 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var speechManager: SpeechManager
     private var preferences: PreferencesManager? = null
     private var textFound = ""
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,19 @@ class CameraActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCameraButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.camera_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    speechManager.stopSpeaking()
+                    false
+                } else {
+                    speechManager.speakOut(getString(R.string.camera_helper_text))
+                    true
+                }
+            }else{
+                speechManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
         }
         if (isAllPermissionsGranted) startCamera() else requestPermissions()
 

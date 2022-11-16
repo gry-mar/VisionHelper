@@ -27,7 +27,8 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private lateinit var speechManager: SpeechManager
     private lateinit var speechRecognizerManager: SpeechRecognizerManager
     private var preferences: PreferencesManager? = null
-
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +70,20 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
 
         val helperButton = findViewById<ImageButton>(R.id.helperCalculatorButton)
         helperButton.setOnClickListener {
-            speechManager.speakOut(getString(R.string.calculator_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    speechManager.stopSpeaking()
+                    false
+                } else {
+                    speechManager.speakOut(getString(R.string.calculator_helper_text))
+                    true
+                }
+            }else{
+                speechManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
+
         }
 
     }

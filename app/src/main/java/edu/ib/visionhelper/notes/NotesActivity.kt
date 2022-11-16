@@ -15,6 +15,8 @@ class NotesActivity : AppCompatActivity() {
     var adapter: NotesListAdapter? = null
     private lateinit var speechManager: SpeechManager
     private var preferences: PreferencesManager? = null
+    private var isSpeaking: Boolean = false
+    private var isFirstSpeech: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +27,19 @@ class NotesActivity : AppCompatActivity() {
 
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
         helperButton.setOnClickListener{
-            speechManager.speakOut(getString(R.string.notes_helper_text))
+            if(!isFirstSpeech) {
+                isSpeaking = if (isSpeaking) {
+                    speechManager.stopSpeaking()
+                    false
+                } else {
+                    speechManager.speakOut(getString(R.string.notes_helper_text))
+                    true
+                }
+            }else{
+                speechManager.stopSpeaking()
+                isSpeaking = false
+            }
+            isFirstSpeech = false
         }
 
         listView = findViewById(R.id.listNotes)
