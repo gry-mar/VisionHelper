@@ -22,7 +22,6 @@ class CallListAdapter(
     private lateinit var contactNumber: TextView
     private var textPreferences: TextSizePreferencesManager? = null
     private var textSize: Float
-    //private lateinit var viewManager: CallManager
 
     init {
         textPreferences = TextSizePreferencesManager(context)

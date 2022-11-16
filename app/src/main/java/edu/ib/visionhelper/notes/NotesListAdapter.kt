@@ -8,11 +8,14 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.call.CallManager
+import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
 class NotesListAdapter(
     private val context: Context,
-    private val arrayList: java.util.ArrayList<String>
+    private val arrayList: java.util.ArrayList<String>,
+    private val viewManager: SpeechManager
 ) : BaseAdapter() {
 
     private lateinit var noteTitle: TextView
@@ -44,6 +47,12 @@ class NotesListAdapter(
         noteTitle = convertView.findViewById(R.id.notetitle)
         noteTitle.textSize = textSize
         noteTitle.text = arrayList[position]
+
+        convertView.setOnClickListener {
+            val item: Int = getItem(position) as Int
+            viewManager.speakOut(arrayList[item])
+        }
+
         return convertView
     }
 }

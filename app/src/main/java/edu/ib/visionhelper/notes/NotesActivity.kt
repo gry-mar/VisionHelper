@@ -1,6 +1,7 @@
 package edu.ib.visionhelper.notes
 
 import android.os.Bundle
+import android.widget.AbsListView
 import android.widget.ImageButton
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -46,8 +47,16 @@ class NotesActivity : AppCompatActivity() {
         arrayList.add("Przykładowa notatka 1")
         arrayList.add("Przykładowa notatka 2")
         arrayList.add("Przykładowa notatka 3")
-        adapter = NotesListAdapter(this, arrayList)
+        adapter = NotesListAdapter(this, arrayList, speechManager)
         listView.adapter = adapter
+        listView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScroll(p0: AbsListView?, FirstVisibleItem: Int, i2: Int, i3: Int) {
+                speechManager.stopSpeaking()
+            }
+            override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
+                speechManager.stopSpeaking()
+            }
+        })
     }
     public override fun onDestroy() {
         // Shutdown TTS when
