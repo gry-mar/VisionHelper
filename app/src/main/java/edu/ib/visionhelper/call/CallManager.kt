@@ -9,7 +9,9 @@ import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
+import androidx.core.text.isDigitsOnly
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.manager.FileManager
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.SpeechRecognizerManager
@@ -30,9 +32,16 @@ class CallManager(context: Context, activity: CallActivity) {
     private var speech: SpeechRecognizer
     private var recognizerIntent: Intent
     private var activityContext = context
+    private var addContactStarted: Boolean = false
+    private var addContactNumber: Boolean = false
+    private var fileManager: FileManager = FileManager()
+    private var temporaryContact = CallListElement("",0)
 
     init {
         preferences = PreferencesManager(context)
+        addContactStarted = false
+        addContactNumber = false
+
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         Log.i(
             "logTag", "isRecognitionAvailable: " +
@@ -73,14 +82,65 @@ class CallManager(context: Context, activity: CallActivity) {
           $result
           """.trimIndent()
         }
-        returnedText = text
-        speechManager.speakOut(activityContext.getString(R.string.call_to) + returnedText)
-        while (speechManager.isFinishedSpeaking != 1) {
-            //wait for speech manager to finish speaking
+        returnedText = text.replace(" ","")
+        if (addContactStarted && !addContactNumber){
+            speak("Nazwa kontaktu to : "+returnedText+". Teraz przytrzymaj ponownie aby dodać numer")
+            temporaryContact.contactName = returnedText
+            addContactNumber = true
+            addContactStarted = false
+            while (speechManager.isFinishedSpeaking != 1) {
+                //wait for speech manager to finish speaking
+            }
+            return
         }
-        TimeUnit.MILLISECONDS.sleep(500)
-        call()
-        println(speechManager.isFinishedSpeaking)
+        if (addContactNumber && !addContactStarted){
+            speak("Numer kontaktu to :"+returnedText)
+            println(returnedText)
+           // addContactNumber = false
+            //addContactStarted = false
+            while (speechManager.isFinishedSpeaking != 1) {
+                //wait for speech manager to finish speaking
+            }
+            if (returnedText.isDigitsOnly()){
+                if(returnedText.length==9){
+                    temporaryContact.contactNumber = returnedText.toInt()
+                    speak("Poprawnie dodano kontakt")
+                    while (speechManager.isFinishedSpeaking != 1) {
+                        //wait for speech manager to finish speaking
+                    }
+                    addContactNumber = false
+                    addContactStarted = false
+                    return
+                }
+                else{
+                    speak("Numer kontaktu za krótki. Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie")
+                    while (speechManager.isFinishedSpeaking != 1) {
+                        //wait for speech manager to finish speaking
+                    }
+                    addContactNumber = false
+                    addContactStarted = true
+                    return
+                }
+            }
+            else {
+                speak("W numerze znajdują się litery Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie")
+                while (speechManager.isFinishedSpeaking != 1) {
+                    //wait for speech manager to finish speaking
+                }
+                addContactNumber = false
+                addContactStarted = true
+                return
+            }
+        }
+        else {
+            speechManager.speakOut(activityContext.getString(R.string.call_to) + returnedText)
+            while (speechManager.isFinishedSpeaking != 1) {
+                //wait for speech manager to finish speaking
+            }
+            TimeUnit.MILLISECONDS.sleep(500)
+            call()
+            println(speechManager.isFinishedSpeaking)
+        }
     }
 
     /**
@@ -122,5 +182,24 @@ class CallManager(context: Context, activity: CallActivity) {
                 }
             }
         }
+    }
+
+    fun handleContactAdd(){
+        if(!addContactStarted){
+            if(!addContactStarted){
+                //callButton.setBackgroundResource(R.drawable.shape_circle_green)
+                //addContactButton.setImageResource(R.drawable.ic_cancel)
+                speak("Aby dodać kontakt przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę")
+                while (speechManager.isFinishedSpeaking != 1){
+                    //wait for speech manager to finish speaking
+                }
+                addContactStarted = true
+            }
+
+        }
+        else{
+            speak("Wyjście")
+        }
+
     }
 }
