@@ -1,8 +1,5 @@
 package edu.ib.visionhelper.call
-
-import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -11,10 +8,6 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
 import android.widget.AbsListView
-
-
-
-
 
 
 class CallActivity : AppCompatActivity(), RecognitionListener {
@@ -38,12 +31,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
         val addContactButton = findViewById<ImageButton>(R.id.addContactButton)
         addContactButton.setOnClickListener{
-            viewManager.handleContactAdd()
-
-//            if(addContactStarted){
-//                viewManager.speak("Wyjście z dodawania")
-//                addContactStarted = false
-//            }
+            viewManager.handleContactAdd(callButton, addContactButton)
 
         }
 
