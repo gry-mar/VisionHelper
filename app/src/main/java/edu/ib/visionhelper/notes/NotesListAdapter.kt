@@ -15,7 +15,7 @@ import edu.ib.visionhelper.manager.TextSizePreferencesManager
 class NotesListAdapter(
     private val context: Context,
     private val arrayList: java.util.ArrayList<String>,
-    private val viewManager: SpeechManager
+    private val viewManager: NotesManager
 ) : BaseAdapter() {
 
     private lateinit var noteTitle: TextView
@@ -50,7 +50,7 @@ class NotesListAdapter(
 
         convertView.setOnClickListener {
             val item: Int = getItem(position) as Int
-            viewManager.speakOut(arrayList[item])
+            viewManager.speak(arrayList[item])
         }
 
         return convertView
