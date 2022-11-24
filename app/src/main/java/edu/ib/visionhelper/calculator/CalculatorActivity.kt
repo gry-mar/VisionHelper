@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
@@ -20,12 +21,18 @@ import edu.ib.visionhelper.manager.SpeechRecognizerManager
 class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private val permission = 100
     private lateinit var returnedText: TextView
+    private lateinit var finalText: TextView
     private lateinit var speech: SpeechRecognizer
     private lateinit var recognizerIntent: Intent
     private lateinit var btnMicrophone: ImageButton
     private var logTag = "VoiceRecognitionActivity"
     private lateinit var speechManager: SpeechManager
     private lateinit var speechRecognizerManager: SpeechRecognizerManager
+    private lateinit var calculatorManager: CalculatorManager
+    private lateinit var textArray : MutableList<String>
+    private lateinit var textWithMinusFixed : MutableList<String>
+    private lateinit var textWithDigistFixed : MutableList<String>
+    private var finalNumber : Int = 0
     private var preferences: PreferencesManager? = null
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
@@ -33,6 +40,8 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calculator)
+
+        calculatorManager = CalculatorManager();
 
         speechRecognizerManager = SpeechRecognizerManager(this)
         speech = SpeechRecognizer.createSpeechRecognizer(this)
@@ -44,6 +53,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
                 Toast.LENGTH_LONG
             ).show()
         } else {
+            finalText = findViewById(R.id.tvResultCalculator)
             btnMicrophone = findViewById(R.id.btnSoundCalculator)
             returnedText = findViewById(R.id.tvEquationCalculator)
 
@@ -56,12 +66,14 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "US-en")
             recognizerIntent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
             )
             recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
 
             btnMicrophone.setOnLongClickListener {
                 returnedText.clearComposingText()
+                ActivityCompat.requestPermissions(this@CalculatorActivity,
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
                 true
             }
         }
@@ -173,7 +185,11 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
           $result
           """.trimIndent()
         }
-        returnedText.text = text
+        textArray = calculatorManager.textSeparator(text)
+        textWithDigistFixed = calculatorManager.textToDigitsChanger(textArray)
+        returnedText.text = calculatorManager.textOrganizer(textWithDigistFixed)
+        finalNumber = calculatorManager.textAnalizer(textWithDigistFixed)
+        finalText.text = finalNumber.toString()
     }
 
 
