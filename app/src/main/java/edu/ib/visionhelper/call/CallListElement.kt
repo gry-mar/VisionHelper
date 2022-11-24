@@ -1,5 +1,8 @@
 package edu.ib.visionhelper.call
 
-class CallListElement(val contactName: String, val contactNumber: Int) {
+class CallListElement(var contactName: String, var contactNumber: Int) {
 
+    override fun toString(): String {
+        return "CallListElement(contactName='$contactName', contactNumber=$contactNumber)"
+    }
 }

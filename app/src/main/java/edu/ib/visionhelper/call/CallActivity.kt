@@ -1,8 +1,5 @@
 package edu.ib.visionhelper.call
-
-import android.graphics.Color
 import android.os.Bundle
-import android.provider.Settings
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -13,16 +10,13 @@ import edu.ib.visionhelper.R
 import android.widget.AbsListView
 
 
-
-
-
-
 class CallActivity : AppCompatActivity(), RecognitionListener {
 
     private lateinit var listView: ListView
     private lateinit var viewManager: CallManager
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +27,12 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         callButton.setOnLongClickListener {
             viewManager.listen()
             true
+        }
+
+        val addContactButton = findViewById<ImageButton>(R.id.addContactButton)
+        addContactButton.setOnClickListener{
+            viewManager.handleContactAdd(callButton, addContactButton)
+
         }
 
 

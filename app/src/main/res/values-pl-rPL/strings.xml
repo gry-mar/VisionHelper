@@ -11,4 +11,11 @@
     <string name="zoomed_text_too_big">Wybrany rozmiar czcionki jest za duży.</string>
     <string name="call_to">Dzwonię do kontaktu o nazwie:</string>
     <string name="install_google_app">Nie można podłączyć się do serwisu rozpoznawania mowy. Upewnij się, że masz zainstalowaną aplikację Google.</string>
+    <string name="contact_name_is">"Nazwa kontaktu to : "</string>
+    <string name="press_again">. Teraz przytrzymaj ponownie aby dodać numer</string>
+    <string name="contact_add_success">Poprawnie dodano kontakt</string>
+    <string name="contact_number_too_short">Numer kontaktu za krótki. Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie</string>
+    <string name="contact_number_letters">W numerze znajdują się litery Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie</string>
+    <string name="contact_no_contact">"Nie ma kontaktu o nazwie "</string>
+    <string name="contact_add_contact_start">Aby dodać kontakt przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę</string>
 </resources>
