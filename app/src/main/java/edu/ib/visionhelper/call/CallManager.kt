@@ -72,7 +72,8 @@ class CallManager(context: Context, activity: CallActivity) {
     }
 
     /**
-     * Handles results of input speech: result text given to call contact
+     * Handles results of input speech: result text given to call contact or when contact add
+     * (name and then number)
      */
     fun handleResults(results: Bundle?) {
         speechManager.isFinishedSpeaking = 0
@@ -85,7 +86,8 @@ class CallManager(context: Context, activity: CallActivity) {
         }
         returnedText = text.replace(" ","")
         if (addContactStarted && !addContactNumber){
-            speak("Nazwa kontaktu to : "+returnedText+". Teraz przytrzymaj ponownie aby dodać numer")
+            speak(activityContext.getString(R.string.contact_name_is)+returnedText+
+                    activityContext.getString(R.string.press_again))
             temporaryContact.contactName = returnedText
             addContactNumber = true
             addContactStarted = false
@@ -95,24 +97,22 @@ class CallManager(context: Context, activity: CallActivity) {
             return
         }
         if (addContactNumber && !addContactStarted){
-            speak("Numer kontaktu to :"+returnedText)
-            println(returnedText)
-            while (speechManager.isFinishedSpeaking != 1) {
-                //wait for speech manager to finish speaking
-            }
             if (returnedText.isDigitsOnly()){
                 if(returnedText.length==9){
                     temporaryContact.contactNumber = returnedText.toInt()
-                    speak("Poprawnie dodano kontakt")
+                    speak(activityContext.getString(R.string.contact_add_success))
                     while (speechManager.isFinishedSpeaking != 1) {
                         //wait for speech manager to finish speaking
                     }
+                    callButton.setBackgroundResource(R.drawable.shape_blue_circle)
+                    addButton.setImageResource(R.drawable.ic_add_note)
                     addContactNumber = false
                     addContactStarted = false
+                    println(temporaryContact.toString())
                     return
                 }
                 else{
-                    speak("Numer kontaktu za krótki. Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie")
+                    speak(activityContext.getString(R.string.contact_number_too_short))
                     while (speechManager.isFinishedSpeaking != 1) {
                         //wait for speech manager to finish speaking
                     }
@@ -122,7 +122,7 @@ class CallManager(context: Context, activity: CallActivity) {
                 }
             }
             else {
-                speak("W numerze znajdują się litery Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie")
+                speak(activityContext.getString(R.string.contact_number_letters))
                 while (speechManager.isFinishedSpeaking != 1) {
                     //wait for speech manager to finish speaking
                 }
@@ -137,7 +137,7 @@ class CallManager(context: Context, activity: CallActivity) {
                 temporaryNamesList += element.contactName.lowercase()
             }
             if( !temporaryNamesList.contains(returnedText)){
-                speak("Nie ma kontaktu o nazwie "+ returnedText)
+                speak(activityContext.getString(R.string.contact_no_contact)+ returnedText)
                 while (speechManager.isFinishedSpeaking != 1) {
                     //wait for speech manager to finish speaking
                 }
@@ -201,6 +201,10 @@ class CallManager(context: Context, activity: CallActivity) {
        }
     }
 
+    /**
+     * Function to handle the beginning of contact add
+     * also updates image button icons and colors
+     */
     fun handleContactAdd(callButton: ImageButton, addButton: ImageButton ){
         this.callButton = callButton
         this.addButton = addButton
@@ -208,7 +212,7 @@ class CallManager(context: Context, activity: CallActivity) {
             if(!addContactStarted){
                 callButton.setBackgroundResource(R.drawable.shape_circle_green)
                 addButton.setImageResource(R.drawable.ic_cancel)
-                speak("Aby dodać kontakt przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę")
+                speak(activityContext.getString(R.string.contact_add_contact_start))
                 while (speechManager.isFinishedSpeaking != 1){
                     //wait for speech manager to finish speaking
                 }
@@ -217,7 +221,7 @@ class CallManager(context: Context, activity: CallActivity) {
 
         }
         else{
-            speak("Wyjście")
+            //speak("Wyjście")
             callButton.setBackgroundResource(R.drawable.shape_blue_circle)
             addButton.setImageResource(R.drawable.ic_add_note)
             addContactStarted = false

@@ -55,4 +55,13 @@
 
     <string name="install_google_app">Cannot bind to speech recognition service. Make sure you have installed Google app.</string>
 
+
+    <string name="contact_name_is">Contact name is : </string>
+    <string name="press_again">Now press again to add contact number </string>
+    <string name="contact_add_success">Contact added successfully</string>
+    <string name="contact_number_too_short">Contact number is too short. Hold button and say contact number again</string>
+    <string name="contact_number_letters">Contact number contains letters. Hold button and say contact number again</string>
+    <string name="contact_no_contact">There is no contact named: </string>
+    <string name="contact_add_contact_start">To add contact number hold call button and say name of the contact</string>
+
 </resources>
