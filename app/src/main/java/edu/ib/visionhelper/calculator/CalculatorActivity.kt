@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
@@ -80,6 +81,13 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         speechManager = SpeechManager(this)
         preferences = PreferencesManager(applicationContext)
 
+        TextToSpeech.OnInitListener {
+            if (preferences!!.calculatorFirstTimeLaunched == 0) {
+                speechManager.speakOut(getString(R.string.calculator_helper_text))
+                preferences!!.calculatorFirstTimeLaunched = 1
+            }
+        }
+
         val helperButton = findViewById<ImageButton>(R.id.helperCalculatorButton)
         helperButton.setOnClickListener {
             if(!isFirstSpeech) {
@@ -95,9 +103,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
                 isSpeaking = false
             }
             isFirstSpeech = false
-
         }
-
     }
 
     override fun onRequestPermissionsResult(

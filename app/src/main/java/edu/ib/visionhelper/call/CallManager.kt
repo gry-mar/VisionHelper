@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
@@ -41,6 +42,13 @@ class CallManager(context: Context, activity: CallActivity) {
         preferences = PreferencesManager(context)
         addContactStarted = false
         addContactNumber = false
+
+        TextToSpeech.OnInitListener {
+            if (preferences!!.callFirstTimeLaunched == 0) {
+                speechManager.speakOut(context.getString(R.string.call_helper_text))
+                preferences!!.callFirstTimeLaunched = 1
+            }
+        }
 
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         Log.i(

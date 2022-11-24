@@ -18,7 +18,6 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
     var arrayList: ArrayList<String> = ArrayList()
     var adapter: NotesListAdapter? = null
     private lateinit var speechManager: NotesManager
-    private var preferences: PreferencesManager? = null
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
@@ -27,10 +26,9 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         setContentView(R.layout.activity_notes)
 
         speechManager = NotesManager(this, this)
-        preferences = PreferencesManager(applicationContext)
 
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
-        helperButton.setOnClickListener{
+        helperButton.setOnClickListener {
             if(!isFirstSpeech) {
                 isSpeaking = if (isSpeaking) {
                     speechManager.stopSpeaking()
@@ -46,10 +44,11 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
             isFirstSpeech = false
         }
 
-//        val addNoteBtn = findViewById<ImageButton>(R.id.notesButton)
-//        addNoteBtn.setOnClickListener {
-//            Log.i("NotesActivity", "add note btn clicked")
-//        }
+
+        val addNoteBtn = findViewById<ImageButton>(R.id.addNoteButton)
+        addNoteBtn.setOnClickListener {
+            Log.i("NotesActivity", "add note btn clicked")
+        }
 
         listView = findViewById(R.id.listNotes)
 

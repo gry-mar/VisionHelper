@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,7 +26,6 @@ class MainActivity : AppCompatActivity(){
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,8 +33,15 @@ class MainActivity : AppCompatActivity(){
         preferences = PreferencesManager(applicationContext)
         verifyPermission()
 
+        TextToSpeech.OnInitListener {
+            if(preferences!!.mainFirstTimeLaunched == 0) {
+                speechManager.speakOut(getString(R.string.main_helper_text))
+                preferences!!.mainFirstTimeLaunched = 1
+            }
+        }
+
         val helperButton = findViewById<ImageButton>(R.id.mainhelperButton)
-        helperButton.setOnClickListener{
+        helperButton.setOnClickListener {
             if(!isFirstSpeech) {
                 isSpeaking = if (isSpeaking) {
                     speechManager.stopSpeaking()

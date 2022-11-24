@@ -17,7 +17,6 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_call)
@@ -34,7 +33,6 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
             viewManager.handleContactAdd(callButton, addContactButton)
 
         }
-
 
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
         helperButton.setOnClickListener {

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
@@ -28,6 +29,13 @@ class CameraActivity : AppCompatActivity() {
         speechManager = SpeechManager(this)
         preferences = PreferencesManager(applicationContext)
 
+        TextToSpeech.OnInitListener {
+            if (preferences!!.cameraFirstTimeLaunched == 0) {
+                speechManager.speakOut(getString(R.string.camera_helper_text))
+                preferences!!.cameraFirstTimeLaunched = 1
+            }
+        }
+
         val helperButton = findViewById<ImageButton>(R.id.helperCameraButton)
         helperButton.setOnClickListener{
             if(!isFirstSpeech) {
@@ -44,6 +52,7 @@ class CameraActivity : AppCompatActivity() {
             }
             isFirstSpeech = false
         }
+
         if (isAllPermissionsGranted) startCamera() else requestPermissions()
 
         val startSpeakingButton = findViewById<ImageButton>(R.id.playButton)

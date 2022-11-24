@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.AbsListView
 import android.widget.Toast
@@ -36,6 +37,13 @@ class NotesManager(context: Context, activity: NotesActivity) {
             "logTag", "isRecognitionAvailable: " +
                     SpeechRecognizer.isRecognitionAvailable(context)
         )
+
+        TextToSpeech.OnInitListener {
+            if (preferences!!.notesFirstTimeLaunched == 0) {
+                speechManager.speakOut(context.getString(R.string.notes_helper_text))
+                preferences!!.notesFirstTimeLaunched = 1
+            }
+        }
 
         if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
             Toast.makeText(
