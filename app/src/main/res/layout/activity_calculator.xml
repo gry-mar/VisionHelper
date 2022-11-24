@@ -27,7 +27,7 @@
             android:textColor="@color/green"
             android:layout_weight="1.0"
             android:textSize="64sp"
-            android:text="9*9+10" />
+             />
 
         <TextView
             android:id="@+id/tvEqualsSignCalculator"
@@ -45,7 +45,7 @@
             android:textColor="@color/green"
             android:layout_weight="1.0"
             android:textSize="100sp"
-            android:text="91" />
+             />
 
         <ImageButton
             android:id="@+id/btnSoundCalculator"

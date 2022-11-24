@@ -1,6 +1,7 @@
 package edu.ib.visionhelper.calculator
 
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 
@@ -98,6 +99,16 @@ class CalculatorManager {
             "siedem" -> arrayStringFinal.set(0, "7")
             "osiem" -> arrayStringFinal.set(0, "8")
             "dziewięć" -> arrayStringFinal.set(0, "9")
+            "dziesięć" -> arrayStringFinal.set(0, "10")
+            "jedenaście" -> arrayStringFinal.set(0, "11")
+            "dwanaście" -> arrayStringFinal.set(0, "12")
+            "trzynaście" -> arrayStringFinal.set(0, "13")
+            "czternaście" -> arrayStringFinal.set(0, "14")
+            "piętnaście" -> arrayStringFinal.set(0, "15")
+            "szesnaście" -> arrayStringFinal.set(0, "16")
+            "siedemnaście" -> arrayStringFinal.set(0, "17")
+            "osiemnaście" -> arrayStringFinal.set(0, "18")
+            "dziewiętnaście" -> arrayStringFinal.set(0, "19")
 
             else -> println(":)")
         }
@@ -113,6 +124,16 @@ class CalculatorManager {
             "siedem" -> arrayStringFinal.set(2, "7")
             "osiem" -> arrayStringFinal.set(2, "8")
             "dziewięć" -> arrayString.set(2, "9")
+            "dziesięć" -> arrayStringFinal.set(2, "10")
+            "jedenaście" -> arrayStringFinal.set(2, "11")
+            "dwanaście" -> arrayStringFinal.set(2, "12")
+            "trzynaście" -> arrayStringFinal.set(2, "13")
+            "czternaście" -> arrayStringFinal.set(2, "14")
+            "piętnaście" -> arrayStringFinal.set(2, "15")
+            "szesnaście" -> arrayStringFinal.set(2, "16")
+            "siedemnaście" -> arrayStringFinal.set(2, "17")
+            "osiemnaście" -> arrayStringFinal.set(2, "18")
+            "dziewiętnaście" -> arrayStringFinal.set(2, "19")
 
             else -> println(":)")
         }

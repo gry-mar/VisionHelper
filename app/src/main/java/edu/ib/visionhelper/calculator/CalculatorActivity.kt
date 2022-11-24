@@ -46,13 +46,13 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         speechRecognizerManager = SpeechRecognizerManager(this)
         speech = SpeechRecognizer.createSpeechRecognizer(this)
 
-        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
-            Toast.makeText(
-                applicationContext,
-                getString(R.string.install_google_app),
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
+//        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
+//            Toast.makeText(
+//                applicationContext,
+//                getString(R.string.install_google_app),
+//                Toast.LENGTH_LONG
+//            ).show()
+//        } else {
             finalText = findViewById(R.id.tvResultCalculator)
             btnMicrophone = findViewById(R.id.btnSoundCalculator)
             returnedText = findViewById(R.id.tvEquationCalculator)
@@ -76,7 +76,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
                     arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
                 true
             }
-        }
+       // }
         speechManager = SpeechManager(this)
         preferences = PreferencesManager(applicationContext)
 
@@ -190,6 +190,8 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         returnedText.text = calculatorManager.textOrganizer(textWithDigistFixed)
         finalNumber = calculatorManager.textAnalizer(textWithDigistFixed)
         finalText.text = finalNumber.toString()
+
+        speechManager.speakOut(finalNumber.toString())
     }
 
 
