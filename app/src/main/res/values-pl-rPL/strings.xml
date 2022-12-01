@@ -6,7 +6,7 @@
     <string name="camera_helper_text">W tym widoku możesz odczytać tekst na podstawie obrazu z kamery. Odczytywany tekst znajduje się wewnątrz czerwonego prostokąta. Naprowadź na wybrany obszar i naciśnij zielone kółko, aby rozpocząć czytanie W przypadku problemów z wykryciem tekstu spróbuj poprawić ostrość lub włączyć latarkę. Jeśli chcesz zatrzymać odczyt, naciśnij czerwone kółko po prawej stronie. Możesz odtworzyć tę wiadomość ponownie, naciskając niebieskie kółko ze znakiem zapytania w lewym górnym rogu ekranu.</string>
     <string name="call_helper_text">Tu możesz zadzwonić do kontaktu z listy lub głosowo dodać nowy. Na górze ekranu znajdują się kontakty, które dodano wcześniej. Jeśli chcesz dodać nowy kontakt, naciśnij zielone kółko ze znakiem plus i podaj asystentowi jego numer i nazwę. Wybierz kontakt, do którego chcesz zadzwonić, naciskając pozycję na liście. Po wybraniu naciśnij duże niebieskie kółko, aby zadzwonić. Możesz odtworzyć tę wiadomość ponownie, naciskając niebieskie kółko ze znakiem zapytania w lewym górnym rogu ekranu.</string>
     <string name="zoom_helper_text">Tutaj możesz dostosować rozmiar czcionki aplikacji. Skaluj rozmiar czcionki tekstu na środku ekranu, naciskając zielone kółko plusa lub niebieskiego minusa. Jeśli czcionka jest już dla Ciebie widoczna, zatwierdź wybrany rozmiar, naciskając fioletowe kółko na dole. Możesz odtworzyć tę wiadomość ponownie, naciskając niebieskie kółko ze znakiem zapytania w lewym górnym rogu ekranu.</string>
-    <string name="confirm_zoomed_text">Wybrany rozmiar czcionki to </string>
+    <string name="confirm_zoomed_text">Zapisano rozmiar czcionki aplikacji: </string>
     <string name="zoomed_text_too_small">Wybrany rozmiar czcionki jest za mały.</string>
     <string name="zoomed_text_too_big">Wybrany rozmiar czcionki jest za duży.</string>
     <string name="call_to">Dzwonię do kontaktu o nazwie:</string>
@@ -18,4 +18,8 @@
     <string name="contact_number_letters">W numerze znajdują się litery Przytrzymaj przycisk i wypowiedz numer kontaktu ponownie</string>
     <string name="contact_no_contact">"Nie ma kontaktu o nazwie "</string>
     <string name="contact_add_contact_start">Aby dodać kontakt przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę</string>
+    <string name="notes_add_note_start">Aby dodać nową notatkę przytrzymaj przycisk z plusem i wypowiedz jej tytuł.</string>
+    <string name="note_title_is">Tytuł notatki to : </string>
+    <string name="press_again_note">Teraz przytrzymaj przycisk ponownie aby nagrać głosową notatkę.</string>
+
 </resources>

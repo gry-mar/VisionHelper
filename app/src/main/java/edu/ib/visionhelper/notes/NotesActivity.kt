@@ -1,5 +1,6 @@
 package edu.ib.visionhelper.notes
 
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
@@ -7,29 +8,37 @@ import android.util.Log
 import android.widget.AbsListView
 import android.widget.ImageButton
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
-import edu.ib.visionhelper.manager.PreferencesManager
-import edu.ib.visionhelper.manager.SpeechManager
+import kotlinx.android.synthetic.main.activity_notes.*
 
 class NotesActivity : AppCompatActivity(), RecognitionListener {
 
+    private lateinit var notesFilesManager: NotesFilesManager
+    private var isRecordingStarted: Boolean = false
     lateinit var listView: ListView
     var arrayList: ArrayList<String> = ArrayList()
     var adapter: NotesListAdapter? = null
     private lateinit var speechManager: NotesManager
+    private lateinit var notesRecorderManager: NotesRecorderManager
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
         speechManager = NotesManager(this, this)
 
+        listView = findViewById(R.id.listNotes)
+
+        listView.adapter = speechManager.adapter
+
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
         helperButton.setOnClickListener {
-            if(!isFirstSpeech) {
+            if (!isFirstSpeech) {
                 isSpeaking = if (isSpeaking) {
                     speechManager.stopSpeaking()
                     false
@@ -37,32 +46,59 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
                     speechManager.speak(getString(R.string.notes_helper_text))
                     true
                 }
-            }else{
+            } else {
                 speechManager.stopSpeaking()
                 isSpeaking = false
             }
             isFirstSpeech = false
         }
 
-
-        val addNoteBtn = findViewById<ImageButton>(R.id.addNoteButton)
-        addNoteBtn.setOnClickListener {
-            Log.i("NotesActivity", "add note btn clicked")
+        val addNoteButton = findViewById<ImageButton>(R.id.addNoteButton)
+        addNoteButton.setOnClickListener {
+            speechManager.handleAddButton(addNoteButton)
         }
 
-        listView = findViewById(R.id.listNotes)
+        addNoteButton.setOnLongClickListener {
+            if (speechManager.addNoteStarted && !speechManager.addNoteMessage) {
+                speechManager.listen()
+            }
+            true
+        }
 
-        listView.adapter = adapter
+        val playStopNoteButton = findViewById<ImageButton>(R.id.playStopNotesButton)
+
+        playStopNoteButton.setOnClickListener {
+            if (speechManager.addNoteMessage && !speechManager.addNoteStarted) {
+                playStopNoteButton.setImageResource(R.drawable.ic_play)
+                if (isRecordingStarted) {
+                    notesRecorderManager.stopRecording()
+                    speechManager.addNoteMessage = false
+                    speechManager.addNoteStarted = false
+                    isRecordingStarted = false
+                    notesFilesManager = NotesFilesManager()
+                    notesFilesManager.writeToFile(speechManager.noteTitle, applicationContext)
+                    notesFilesManager.readFile(applicationContext)
+                } else {
+                    notesRecorderManager =
+                        NotesRecorderManager(this, this, speechManager.noteTitle)
+                    notesRecorderManager.startRecording()
+                    playStopNoteButton.setImageResource(R.drawable.ic_stop)
+                    isRecordingStarted = true
+                }
+            }
+        }
 
         listView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(p0: AbsListView?, FirstVisibleItem: Int, i2: Int, i3: Int) {
                 speechManager.stopSpeaking()
             }
+
             override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
                 speechManager.stopSpeaking()
             }
         })
     }
+
     public override fun onDestroy() {
         // Shutdown TTS when
         // activity is destroyed
@@ -74,6 +110,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         Log.i("logTag", "start")
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onBeginningOfSpeech() {
         Log.i("logTag", "onBeginningOfSpeech")
     }
@@ -114,7 +151,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
 
 
     override fun onResults(results: Bundle?) {
-        speechManager.handleResults(results)
+        speechManager.handleResults(results, playStopNotesButton)
     }
 
     override fun onPartialResults(partialResults: Bundle?) {

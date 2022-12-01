@@ -7,13 +7,12 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.widget.AbsListView
+import android.widget.ImageButton
 import android.widget.Toast
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.SpeechRecognizerManager
-import java.util.concurrent.TimeUnit
 
 /**
  * Manager class to handle NotesActivity logic
@@ -28,14 +27,19 @@ class NotesManager(context: Context, activity: NotesActivity) {
     var returnedText: String = ""
     private var speech: SpeechRecognizer
     private var recognizerIntent: Intent
+    var addNoteStarted: Boolean = false
+    var addNoteMessage: Boolean = false
     private var activityContext = context
+    private lateinit var addButton: ImageButton
+    private lateinit var playStopButton: ImageButton
+    var noteTitle = ""
 
     init {
-        preferences = PreferencesManager(context)
-        speech = SpeechRecognizer.createSpeechRecognizer(context)
+        preferences = PreferencesManager(activityContext)
+        speech = SpeechRecognizer.createSpeechRecognizer(activityContext)
         Log.i(
             "logTag", "isRecognitionAvailable: " +
-                    SpeechRecognizer.isRecognitionAvailable(context)
+                    SpeechRecognizer.isRecognitionAvailable(activityContext)
         )
 
         TextToSpeech.OnInitListener {
@@ -67,7 +71,8 @@ class NotesManager(context: Context, activity: NotesActivity) {
 
     }
 
-    fun handleResults(results: Bundle?) {
+    fun handleResults(results: Bundle?, playStopNotesButton: ImageButton) {
+        speechManager.isFinishedSpeaking = 0
         val matches = results!!.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         var text = ""
         if (matches != null) {
@@ -75,16 +80,22 @@ class NotesManager(context: Context, activity: NotesActivity) {
           $result
           """.trimIndent()
         }
+        this.playStopButton = playStopNotesButton
+        println("set to green circle")
+        playStopButton.setImageResource(R.drawable.ic_play)
         returnedText = text
-
-
-        while (speechManager.isFinishedSpeaking != 1) {
-            //wait for speech manager to finish speaking
+        if (addNoteStarted){
+            speak(activityContext.getString(R.string.note_title_is) + returnedText +
+                    activityContext.getString(R.string.press_again_note))
+            noteTitle = returnedText
+            println("TITLE: " + noteTitle)
+            while (speechManager.isFinishedSpeaking != 1) {
+                //wait for speech manager to finish speaking
+            }
+            addNoteMessage = true
+            addNoteStarted = false
+            return
         }
-        TimeUnit.MILLISECONDS.sleep(500)
-
-
-
     }
 
     /**
@@ -106,5 +117,19 @@ class NotesManager(context: Context, activity: NotesActivity) {
      */
     fun speak(text: String) {
         speechManager.speakOut(text)
+    }
+
+    /**
+     * Function to handle the beginning of adding new note
+     */
+    fun handleAddButton(addButton: ImageButton){
+        this.addButton = addButton
+            if(!addNoteStarted){
+                speak(activityContext.getString(R.string.notes_add_note_start))
+                while (speechManager.isFinishedSpeaking != 1){
+                    //wait for speech manager to finish speaking
+                }
+                addNoteStarted = true
+            }
     }
 }
