@@ -15,13 +15,8 @@ import kotlinx.android.synthetic.main.activity_notes.*
 
 class NotesActivity : AppCompatActivity(), RecognitionListener {
 
-    private lateinit var notesFilesManager: NotesFilesManager
-    private var isRecordingStarted: Boolean = false
     lateinit var listView: ListView
-    var arrayList: ArrayList<String> = ArrayList()
-    var adapter: NotesListAdapter? = null
     private lateinit var speechManager: NotesManager
-    private lateinit var notesRecorderManager: NotesRecorderManager
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
@@ -68,24 +63,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         val playStopNoteButton = findViewById<ImageButton>(R.id.playStopNotesButton)
 
         playStopNoteButton.setOnClickListener {
-            if (speechManager.addNoteMessage && !speechManager.addNoteStarted) {
-                playStopNoteButton.setImageResource(R.drawable.ic_play)
-                if (isRecordingStarted) {
-                    notesRecorderManager.stopRecording()
-                    speechManager.addNoteMessage = false
-                    speechManager.addNoteStarted = false
-                    isRecordingStarted = false
-                    notesFilesManager = NotesFilesManager()
-                    notesFilesManager.writeToFile(speechManager.noteTitle, applicationContext)
-                    notesFilesManager.readFile(applicationContext)
-                } else {
-                    notesRecorderManager =
-                        NotesRecorderManager(this, this, speechManager.noteTitle)
-                    notesRecorderManager.startRecording()
-                    playStopNoteButton.setImageResource(R.drawable.ic_stop)
-                    isRecordingStarted = true
-                }
-            }
+            speechManager.handlePlayStopButton(playStopNoteButton)
         }
 
         listView.setOnScrollListener(object : AbsListView.OnScrollListener {
@@ -99,6 +77,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     public override fun onDestroy() {
         // Shutdown TTS when
         // activity is destroyed
@@ -150,6 +129,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onResults(results: Bundle?) {
         speechManager.handleResults(results, playStopNotesButton)
     }

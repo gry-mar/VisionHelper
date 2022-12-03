@@ -2,6 +2,7 @@ package edu.ib.visionhelper.notes
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -9,6 +10,7 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
@@ -17,8 +19,12 @@ import edu.ib.visionhelper.manager.SpeechRecognizerManager
 /**
  * Manager class to handle NotesActivity logic
  */
-class NotesManager(context: Context, activity: NotesActivity) {
+@RequiresApi(Build.VERSION_CODES.S)
+class NotesManager(context: Context, val activity: NotesActivity) {
 
+    private var notesFilesManager: NotesFilesManager
+    private var isRecordingStarted: Boolean = false
+    private var notesRecorderManager: NotesRecorderManager
     private var speechManager: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
@@ -35,6 +41,9 @@ class NotesManager(context: Context, activity: NotesActivity) {
     var noteTitle = ""
 
     init {
+        notesFilesManager = NotesFilesManager()
+        notesRecorderManager =
+            NotesRecorderManager(activityContext, activity, noteTitle)
         preferences = PreferencesManager(activityContext)
         speech = SpeechRecognizer.createSpeechRecognizer(activityContext)
         Log.i(
@@ -64,11 +73,69 @@ class NotesManager(context: Context, activity: NotesActivity) {
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
-        arrayList.add("Przykładowa notatka 1")
-        arrayList.add("Przykładowa notatka 2")
-        arrayList.add("Przykładowa notatka 3")
+
+        val files = notesFilesManager.readFile(activityContext)
+
+        var indexPrevious = 0
+        var index = 0
+        files.forEach { char: Char ->
+            if(char == ','){
+                arrayList.add(files.substring(indexPrevious, index))
+                indexPrevious = index+1
+            }
+            index++
+        }
         adapter = NotesListAdapter(context, arrayList, this)
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun handlePlayStopButton(playStopNotesButton: ImageButton) {
+        this.playStopButton = playStopNotesButton
+
+        if(!addNoteMessage && !addNoteStarted) {
+            if (notesRecorderManager.mMediaPlayer?.isPlaying == true) {
+                notesRecorderManager.stopSound()
+                playStopButton.setImageResource(R.drawable.ic_play)
+            } else {
+                if (adapter?.getItemSelected() != null) {
+                    println("JEST SELECTED")
+                    playStopButton.setImageResource(R.drawable.ic_stop)
+                    notesRecorderManager.playSound(adapter?.getItemSelected()!!)
+                }
+            }
+        }
+            if (addNoteMessage && !addNoteStarted) {
+                playStopButton.setImageResource(R.drawable.ic_play)
+                if (isRecordingStarted) {
+                    notesRecorderManager.stopRecording()
+                    addNoteMessage = false
+                    addNoteStarted = false
+                    isRecordingStarted = false
+                    notesFilesManager.writeToFile(noteTitle, activityContext)
+                    val files = notesFilesManager.readFile(activityContext)
+
+                    var indexPrevious = 0
+                    var index = 0
+                    files.forEach { char: Char ->
+                        if (char == ',') {
+                            arrayList.add(files.substring(indexPrevious, index))
+                            indexPrevious = index + 1
+                        }
+                        index++
+                    }
+                    adapter = NotesListAdapter(activityContext, arrayList, this)
+
+                    activity.finish()
+                    activity.startActivity(activity.intent)
+                } else {
+                    notesRecorderManager =
+                        NotesRecorderManager(activityContext, activity, noteTitle)
+                    notesRecorderManager.startRecording()
+                    playStopButton.setImageResource(R.drawable.ic_stop)
+                    isRecordingStarted = true
+                }
+            }
     }
 
     fun handleResults(results: Bundle?, playStopNotesButton: ImageButton) {
@@ -81,14 +148,12 @@ class NotesManager(context: Context, activity: NotesActivity) {
           """.trimIndent()
         }
         this.playStopButton = playStopNotesButton
-        println("set to green circle")
         playStopButton.setImageResource(R.drawable.ic_play)
         returnedText = text
         if (addNoteStarted){
             speak(activityContext.getString(R.string.note_title_is) + returnedText +
                     activityContext.getString(R.string.press_again_note))
             noteTitle = returnedText
-            println("TITLE: " + noteTitle)
             while (speechManager.isFinishedSpeaking != 1) {
                 //wait for speech manager to finish speaking
             }

@@ -9,31 +9,31 @@ import java.lang.Exception
 
 class NotesFilesManager {
 
-    var fileInputStream: FileInputStream? = null
-    val stringBuilder: StringBuilder = StringBuilder()
     var text: String? = null
 
     fun writeToFile(content: String, mcoContext: Context) {
         val fileOutputStream:FileOutputStream
         try {
             fileOutputStream = mcoContext.openFileOutput("noteTitles.txt", Context.MODE_APPEND)
-            fileOutputStream.write(("\n" + content).toByteArray())
+            fileOutputStream.write((content + ",").toByteArray())
         }catch (e: Exception){
             e.printStackTrace()
         }
     }
 
-    fun readFile(mcoContext: Context) {
-        var fileInputStream: FileInputStream? = null
-        fileInputStream = mcoContext.openFileInput("noteTitles.txt")
-        var inputStreamReader = InputStreamReader(fileInputStream)
+    fun readFile(mcoContext: Context): String {
+        if(!File(mcoContext.filesDir.absolutePath +"/noteTitles.txt").exists()){
+            File(mcoContext.filesDir.absolutePath + "/noteTitles.txt").createNewFile()
+        }
+        val fileInputStream: FileInputStream? = mcoContext.openFileInput("noteTitles.txt")
+        val inputStreamReader = InputStreamReader(fileInputStream)
         val bufferedReader = BufferedReader(inputStreamReader)
         val stringBuilder: StringBuilder = StringBuilder()
         var text: String? = null
         while ({ text = bufferedReader.readLine(); text }() != null) {
             stringBuilder.append(text)
         }
-        println((stringBuilder.toString()))
+        return stringBuilder.toString()
     }
 
 }
