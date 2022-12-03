@@ -13,17 +13,28 @@ import edu.ib.visionhelper.notes.NotesActivity
 import edu.ib.visionhelper.zoomview.ZoomViewActivity
 import java.util.*
 import android.speech.tts.UtteranceProgressListener
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Tasks.await
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.yield
 
 
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
     private var preferences: PreferencesManager? = null
     var isFinishedSpeaking: Int = 0
-
+    var finished = MutableLiveData<Boolean>(false)
+        private set
     init {
         preferences = PreferencesManager(context)
         textToSpeech = TextToSpeech(context, this)
+        finished.setValue(false)
+        finished.postValue(false)
     }
 
 
@@ -41,7 +52,44 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
      * @param text - text to be read
      */
    fun speakOut(text: String) {
+        finished.value = false
+        textToSpeech.setSpeechRate(1.1f)
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        textToSpeech.setOnUtteranceProgressListener(object :
+            UtteranceProgressListener() {
+            override fun onStart(utteranceId: String) {
+                Log.i("TextToSpeech", "On Start")
+                //MainScope().launch{
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(false)
+                }
+                //finished.postValue(false)
 
+                //}
+            }
+
+            override fun onDone(utteranceId: String) {
+
+                //MainScope().launch{
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(true)
+                }
+               // finished.postValue(true)
+
+                //}
+                Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
+            }
+
+            override fun onError(utteranceId: String) {
+
+            }
+        })
+
+    }
+
+    fun speak(text: String): Flow<Int> = flow {
         textToSpeech.setSpeechRate(1.1f)
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
         textToSpeech.setOnUtteranceProgressListener(object :
@@ -52,16 +100,19 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
             }
 
             override fun onDone(utteranceId: String) {
+               MainScope().launch{
+                    isFinishedSpeaking = 1
+                   emit(1)
 
-                isFinishedSpeaking = 1
+                }
                 Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
+
             }
 
             override fun onError(utteranceId: String) {
 
             }
         })
-
     }
 
     override fun onInit(status: Int) {

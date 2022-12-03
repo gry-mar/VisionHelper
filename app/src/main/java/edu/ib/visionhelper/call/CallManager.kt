@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.FileManager
 import edu.ib.visionhelper.manager.PreferencesManager
@@ -19,9 +22,13 @@ import edu.ib.visionhelper.manager.SpeechRecognizerManager
 /**
  * Manager class to handle CallActivity logic
  */
-class CallManager(context: Context, activity: CallActivity) {
+class CallManager(context: Context, activity: CallActivity,
+                  private val lifecycleOwner: LifecycleOwner
+) {
 
     private var speechManager: SpeechManager = SpeechManager(context)
+    private var speechManagerSecond: SpeechManager = SpeechManager(context)
+    private var speechManagerThird: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<CallListElement> = ArrayList()
@@ -30,8 +37,14 @@ class CallManager(context: Context, activity: CallActivity) {
     private var speech: SpeechRecognizer
     private var recognizerIntent: Intent
     private var activityContext = context
-    private var addContactStarted: Boolean = false
-    private var addContactNumber: Boolean = false
+    var addContactStarted = MutableLiveData<Boolean>(false)
+    private set
+    var updateUI = MutableLiveData<Boolean>(false)
+        private set
+    var longPressActivated = MutableLiveData<Boolean>(true)
+        private set
+    var addContactNumber = MutableLiveData<Boolean>(false)
+        private set
     private var fileManager: FileManager = FileManager()
     private var temporaryContact = CallListElement("",0)
     private lateinit var callButton: ImageButton
@@ -39,8 +52,9 @@ class CallManager(context: Context, activity: CallActivity) {
 
     init {
         preferences = PreferencesManager(context)
-        addContactStarted = false
-        addContactNumber = false
+        addContactStarted.value = false
+        addContactNumber.value = false
+        longPressActivated.value = true
 
         speech = SpeechRecognizer.createSpeechRecognizer(context)
         Log.i(
@@ -76,7 +90,7 @@ class CallManager(context: Context, activity: CallActivity) {
      * (name and then number)
      */
     fun handleResults(results: Bundle?) {
-        speechManager.isFinishedSpeaking = 0
+
         val matches = results!!.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         var text = ""
         if (matches != null) {
@@ -85,80 +99,41 @@ class CallManager(context: Context, activity: CallActivity) {
           """.trimIndent()
         }
         returnedText = text.replace(" ","")
-        if (addContactStarted && !addContactNumber){
+        if (addContactStarted.value == true){
+            longPressActivated.value = false
             speak(activityContext.getString(R.string.contact_name_is)+returnedText+
-                    activityContext.getString(R.string.press_again))
-            temporaryContact.contactName = returnedText
-            addContactNumber = true
-            addContactStarted = false
-            while (speechManager.isFinishedSpeaking != 1) {
-                //wait for speech manager to finish speaking
-            }
+                    "Teraz naciśnij przycisk słuchawki aby otworzyć klawiaturę i dodać numer. " +
+                    "Po wprowadzeniu numeru naciśnij zielony przycisk Aby zatwierdzić wybór")
+            speechManager.finished.observe(lifecycleOwner, Observer {
+                if(it){
+                    temporaryContact.contactName = returnedText
+                    addContactNumber.value = true
+                   // addContactNumber.postValue(true)
+                   // addContactStarted.postValue(false)
+                    callButton.isClickable = true
+                }
+            })
             return
         }
-        if (addContactNumber && !addContactStarted){
-            if (returnedText.isDigitsOnly()){
-                if(returnedText.length==9){
-                    temporaryContact.contactNumber = returnedText.toInt()
-                    speak(activityContext.getString(R.string.contact_add_success))
-                    while (speechManager.isFinishedSpeaking != 1) {
-                        //wait for speech manager to finish speaking
-                    }
-                    callButton.setBackgroundResource(R.drawable.shape_blue_circle)
-                    addButton.setImageResource(R.drawable.ic_add_note)
-                    addContactNumber = false
-                    addContactStarted = false
-                    println(temporaryContact.toString())
-                    return
-                }
-                else{
-                    speak(activityContext.getString(R.string.contact_number_too_short))
-                    while (speechManager.isFinishedSpeaking != 1) {
-                        //wait for speech manager to finish speaking
-                    }
-                    addContactNumber = false
-                    addContactStarted = true
-                    return
-                }
-            }
             else {
-                speak(activityContext.getString(R.string.contact_number_letters))
-                while (speechManager.isFinishedSpeaking != 1) {
-                    //wait for speech manager to finish speaking
-                }
-                addContactNumber = false
-                addContactStarted = true
-                return
-            }
-        }
-        else {
-            var temporaryNamesList = listOf<String>()
-            arrayList.forEach { element ->
-                temporaryNamesList += element.contactName.lowercase()
-            }
-            if( !temporaryNamesList.contains(returnedText)){
-                speak(activityContext.getString(R.string.contact_no_contact)+ returnedText)
-                while (speechManager.isFinishedSpeaking != 1) {
-                    //wait for speech manager to finish speaking
-                }
-                return
-            }else {
-                speechManager.speakOut(activityContext.getString(R.string.call_to) + returnedText)
-                while(speechManager.isFinishedSpeaking != 1){
-                    // wait
-                }
-                call()
-            }
-        }
-    }
+                speakSecond(activityContext.getString(R.string.call_to) + returnedText)
+                speechManagerSecond.finished.observe(lifecycleOwner, Observer {
+                    if(it){
+                        call()
+                    }
+                })
 
+            }
+    }
 
 
     /**
      * Function to listen to input voice
      */
     fun listen() {
-        speech.startListening(recognizerIntent)
+        if (addContactNumber.value == false) {
+            speech.startListening(recognizerIntent)
+        }
     }
 
     /**
@@ -175,14 +150,20 @@ class CallManager(context: Context, activity: CallActivity) {
         speechManager.speakOut(text)
     }
 
+    fun speakSecond(text: String){
+        speechManagerSecond.speakOut(text)
+    }
 
+    fun speakThird(text: String){
+        speechManagerThird.speakOut(text)
+    }
 
     /**
      * Function that opens call intent if speechManager finished speaking
      */
     private fun call() {
         println(returnedText)
-        if (speechManager.isFinishedSpeaking == 1) {
+       // if (speechManager.isFinishedSpeaking == 1) {
 
             arrayList.forEach{ element ->
                 println(element.contactNumber)
@@ -198,7 +179,7 @@ class CallManager(context: Context, activity: CallActivity) {
                     activityContext.startActivity(intent)
                 }
             }
-       }
+      // }
     }
 
     /**
@@ -208,24 +189,73 @@ class CallManager(context: Context, activity: CallActivity) {
     fun handleContactAdd(callButton: ImageButton, addButton: ImageButton ){
         this.callButton = callButton
         this.addButton = addButton
-        if(!addContactStarted){
-            if(!addContactStarted){
-                callButton.setBackgroundResource(R.drawable.shape_circle_green)
-                addButton.setImageResource(R.drawable.ic_cancel)
-                speak(activityContext.getString(R.string.contact_add_contact_start))
-                while (speechManager.isFinishedSpeaking != 1){
-                    //wait for speech manager to finish speaking
+        longPressActivated.value = false
+       callButton.isClickable = false
+        //callButton.isLongClickable = false
+        if(addContactStarted.value == false){
+            speak("Aby dodać nazwę kontaktu przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę.")
+            speechManager.finished.observe( lifecycleOwner, Observer {
+                if(it){
+                    println("Status: "+it)
+                    addContactStarted.value = true
+                    //addContactStarted.postValue(true)
+                   // callButton.isLongClickable = true
+                  callButton.isClickable= false
+                   updateUI.value = true
+                    longPressActivated.value = true
+
+                   // updateUI.postValue(true)
+
                 }
-                addContactStarted = true
-            }
+            })
 
         }
         else{
-            //speak("Wyjście")
-            callButton.setBackgroundResource(R.drawable.shape_blue_circle)
-            addButton.setImageResource(R.drawable.ic_add_note)
-            addContactStarted = false
+
+            speakSecond("Wyjście")
+            speechManagerSecond.finished.observe( lifecycleOwner, Observer {
+                if(it){
+                    addContactStarted.value = false
+                    //addContactStarted.postValue(false)
+                    callButton.isClickable = false
+                    //callButton.isLongClickable = true
+                    updateUI.value = false
+                  // updateUI.postValue(false)
+                    longPressActivated.value = true
+
+
+                }
+            })
         }
 
+    }
+    fun handleCheckNumber(contactNumber: String, numericKeyboard: View){
+        var contactNumber = contactNumber
+        if(contactNumber.length < 9){
+            speak("Numer kontaktu za krótki. Wprowadź ponownie")
+            speechManager.finished.observe( lifecycleOwner, Observer {
+                if(it) {
+                    contactNumber = ""
+                }})
+        }
+        else {
+            speakThird("Poprawnie dodano kontakt")
+            speechManagerThird.finished.observe( lifecycleOwner, Observer {
+                if(it){
+                    temporaryContact.contactNumber = contactNumber.toLong()
+                    println(contactNumber)
+                    println(temporaryContact)
+                    addContactNumber.setValue(false)
+                    addContactStarted.value = false
+                   // addContactNumber.postValue(false)
+                    numericKeyboard.visibility = View.GONE
+                    longPressActivated.value = true
+                    updateUI.value = false
+                    //updateUI.postValue(false)
+
+                }
+            })
+
+        }
     }
 }
