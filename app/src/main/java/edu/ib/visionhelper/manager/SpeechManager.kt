@@ -59,26 +59,18 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
             UtteranceProgressListener() {
             override fun onStart(utteranceId: String) {
                 Log.i("TextToSpeech", "On Start")
-                //MainScope().launch{
                     isFinishedSpeaking = 1
                 MainScope().launch {
                     finished.setValue(false)
                 }
-                //finished.postValue(false)
-
-                //}
             }
 
             override fun onDone(utteranceId: String) {
-
-                //MainScope().launch{
                     isFinishedSpeaking = 1
                 MainScope().launch {
                     finished.setValue(true)
                 }
-               // finished.postValue(true)
 
-                //}
                 Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
             }
 
@@ -89,7 +81,8 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
 
     }
 
-    fun speak(text: String): Flow<Int> = flow {
+    fun speakWithObservable(text: String){
+        finished.value = false
         textToSpeech.setSpeechRate(1.1f)
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
         textToSpeech.setOnUtteranceProgressListener(object :
@@ -97,14 +90,20 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
             override fun onStart(utteranceId: String) {
                 Log.i("TextToSpeech", "On Start")
                 isFinishedSpeaking = 0
+                MainScope().launch {
+                    finished.setValue(false)
+                }
             }
 
             override fun onDone(utteranceId: String) {
-               MainScope().launch{
-                    isFinishedSpeaking = 1
-                   emit(1)
 
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(true)
                 }
+
+
+
                 Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
 
             }

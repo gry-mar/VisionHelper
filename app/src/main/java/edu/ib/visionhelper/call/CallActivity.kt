@@ -57,6 +57,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
             }
         viewManager.longPressActivated.observe(this, Observer {
             callButton.isLongClickable = it
+            callButton.isClickable = !it
         })
 
 

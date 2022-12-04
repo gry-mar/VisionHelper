@@ -29,6 +29,7 @@ class CallManager(context: Context, activity: CallActivity,
     private var speechManager: SpeechManager = SpeechManager(context)
     private var speechManagerSecond: SpeechManager = SpeechManager(context)
     private var speechManagerThird: SpeechManager = SpeechManager(context)
+    private var speechManager4: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<CallListElement> = ArrayList()
@@ -101,16 +102,19 @@ class CallManager(context: Context, activity: CallActivity,
         returnedText = text.replace(" ","")
         if (addContactStarted.value == true){
             longPressActivated.value = false
-            speak(activityContext.getString(R.string.contact_name_is)+returnedText+
+            speak4(activityContext.getString(R.string.contact_name_is)+returnedText+
                     "Teraz naciśnij przycisk słuchawki aby otworzyć klawiaturę i dodać numer. " +
                     "Po wprowadzeniu numeru naciśnij zielony przycisk Aby zatwierdzić wybór")
-            speechManager.finished.observe(lifecycleOwner, Observer {
+            speechManager4.finished.observe(lifecycleOwner, Observer {
                 if(it){
                     temporaryContact.contactName = returnedText
                     addContactNumber.value = true
+                    print("Is clickable"+callButton.isClickable)
                    // addContactNumber.postValue(true)
                    // addContactStarted.postValue(false)
+                    longPressActivated.value = false
                     callButton.isClickable = true
+                    speechManager.finished.value = false
                 }
             })
             return
@@ -147,15 +151,18 @@ class CallManager(context: Context, activity: CallActivity,
      * Calls speechManager speakOut method with given text
      */
     fun speak(text: String) {
-        speechManager.speakOut(text)
+        speechManager.speakWithObservable(text)
     }
 
     fun speakSecond(text: String){
-        speechManagerSecond.speakOut(text)
+        speechManagerSecond.speakWithObservable(text)
     }
 
     fun speakThird(text: String){
-        speechManagerThird.speakOut(text)
+        speechManagerThird.speakWithObservable(text)
+    }
+    fun speak4(text: String){
+        speechManager4.speakWithObservable(text)
     }
 
     /**
@@ -203,6 +210,7 @@ class CallManager(context: Context, activity: CallActivity,
                   callButton.isClickable= false
                    updateUI.value = true
                     longPressActivated.value = true
+                    speechManager.finished.value = false
 
                    // updateUI.postValue(true)
 
@@ -222,6 +230,7 @@ class CallManager(context: Context, activity: CallActivity,
                     updateUI.value = false
                   // updateUI.postValue(false)
                     longPressActivated.value = true
+                    speechManagerSecond.finished.value = false
 
 
                 }
@@ -231,7 +240,7 @@ class CallManager(context: Context, activity: CallActivity,
     }
     fun handleCheckNumber(contactNumber: String, numericKeyboard: View){
         var contactNumber = contactNumber
-        if(contactNumber.length < 9){
+        if(contactNumber.length != 9){
             speak("Numer kontaktu za krótki. Wprowadź ponownie")
             speechManager.finished.observe( lifecycleOwner, Observer {
                 if(it) {
@@ -239,10 +248,11 @@ class CallManager(context: Context, activity: CallActivity,
                 }})
         }
         else {
+            temporaryContact.contactNumber = contactNumber.toLong()
             speakThird("Poprawnie dodano kontakt")
             speechManagerThird.finished.observe( lifecycleOwner, Observer {
                 if(it){
-                    temporaryContact.contactNumber = contactNumber.toLong()
+
                     println(contactNumber)
                     println(temporaryContact)
                     addContactNumber.setValue(false)
@@ -252,6 +262,7 @@ class CallManager(context: Context, activity: CallActivity,
                     longPressActivated.value = true
                     updateUI.value = false
                     //updateUI.postValue(false)
+                    speechManagerThird.finished.value = false
 
                 }
             })
