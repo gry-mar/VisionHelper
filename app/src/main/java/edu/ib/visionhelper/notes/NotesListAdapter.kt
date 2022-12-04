@@ -11,8 +11,6 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import edu.ib.visionhelper.R
-import edu.ib.visionhelper.call.CallManager
-import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -26,11 +24,14 @@ class NotesListAdapter(
     private var textPreferences: TextSizePreferencesManager? = null
     private var textSize: Float
     private var itemSelected: String? = null
+    private var lastSelected: String = ""
+    private var isSelected: Boolean = false
 
     init {
         textPreferences = TextSizePreferencesManager(context)
         textSize = textPreferences!!.textSize
     }
+
     override fun getCount(): Int {
         return arrayList.size
     }
@@ -47,36 +48,51 @@ class NotesListAdapter(
         return position.toLong()
     }
 
+
     @SuppressLint("ViewHolder")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         val convertView = LayoutInflater.from(context).inflate(
             R.layout.activity_listview_notes_adapter,
             parent, false
         )
-        var save = -1
         noteTitle = convertView.findViewById(R.id.notetitle)
         noteTitle.textSize = textSize
         noteTitle.text = arrayList[position]
+        val holder = ViewHolderContact(convertView)
+        val title = holder.title.text
+
+        if (title == lastSelected) {
+            if (isSelected == false) {
+                convertView.setBackgroundColor(Color.BLUE)
+                itemSelected = arrayList[position].replace(' ', '_')
+                isSelected = true
+
+            } else {
+                itemSelected = null
+                convertView.setBackgroundColor(Color.BLACK)
+                isSelected = false
+            }
+        } else {
+            convertView.setBackgroundColor(Color.BLACK)
+        }
 
         convertView.setOnClickListener {
             val item: Int = getItem(position) as Int
-            viewManager.speak(arrayList[item])
-            parent.getChildAt(position).setBackgroundColor(Color.BLUE);
+            val selectedItem = arrayList[item]
 
-            if (save != -1){
-                parent.getChildAt(position).setBackgroundColor(Color.BLACK);
-            }else if(save == position){
-                parent.getChildAt(position).setBackgroundColor(Color.BLACK);
+            lastSelected = selectedItem
+            viewManager.speak(arrayList[position])
+            while (viewManager.speechManager.isFinishedSpeaking == 0) {
             }
-            save = position;
+            notifyDataSetChanged()
 
-            if(itemSelected == null) {
-                itemSelected = arrayList[item].replace(' ', '_')
-            }else {
-                itemSelected = null
-            }
         }
-
         return convertView
     }
+
+    class ViewHolderContact(itemView: View) {
+        val title = itemView.findViewById<TextView>(R.id.notetitle)
+    }
+
+
 }

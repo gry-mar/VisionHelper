@@ -25,7 +25,7 @@ class NotesManager(context: Context, val activity: NotesActivity) {
     private var notesFilesManager: NotesFilesManager
     private var isRecordingStarted: Boolean = false
     private var notesRecorderManager: NotesRecorderManager
-    private var speechManager: SpeechManager = SpeechManager(context)
+    var speechManager: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<String> = ArrayList()

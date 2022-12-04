@@ -1,5 +1,6 @@
 package edu.ib.visionhelper.notes
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -12,6 +13,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
 import kotlinx.android.synthetic.main.activity_notes.*
+import android.widget.AdapterView
+
+import android.widget.AdapterView.OnItemClickListener
+
+
+
 
 class NotesActivity : AppCompatActivity(), RecognitionListener {
 
