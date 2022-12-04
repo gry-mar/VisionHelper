@@ -32,6 +32,7 @@ class CallManager(
     private var speechManager4: SpeechManager = SpeechManager(context)
     private var speechManager5: SpeechManager = SpeechManager(context)
     private var speechManager6: SpeechManager = SpeechManager(context)
+    private var speechManager8: SpeechManager = SpeechManager(context)
     var speechManager7: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
@@ -95,6 +96,7 @@ class CallManager(
 
     /**
      * Handles results of input speech: result text given to call contact or when contact add
+     * or name of contact to be deleted
      * (name and then number)
      */
     fun handleResults(results: Bundle?) {
@@ -116,15 +118,13 @@ class CallManager(
             if (!temporaryContactNameList.contains(returnedText)) {
                 speak(
                     activityContext.getString(R.string.contact_name_is) + returnedText +
-                            "Teraz naciśnij przycisk słuchawki aby otworzyć klawiaturę i dodać numer. " +
-                            "Po wprowadzeniu numeru naciśnij zielony przycisk Aby zatwierdzić wybór",
+                            activityContext.getString(R.string.contact_click_to_add_number),
                     4
                 )
                 speechManager4.finished.observe(lifecycleOwner, {
                     if (it) {
                         temporaryContact.contactName = returnedText
                         addContactNumber.value = true
-                        print("Is clickable" + callButton.isClickable)
                         longPressActivated.value = false
                         callButton.isClickable = true
                         speechManager.finished.value = false
@@ -133,7 +133,7 @@ class CallManager(
                 })
                 return
             } else {
-                speak("Taki kontakt już istnieje przytrzymaj ponownie aby dodać kontakt", 5)
+                speak(activityContext.getString(R.string.contact_is_already_add), 5)
                 speechManager5.finished.observe(lifecycleOwner, {
                     if (it) {
                         longPressActivated.value = true
@@ -147,7 +147,7 @@ class CallManager(
             if (temporaryContactNameList.contains(returnedText)) {
                 println(returnedText)
                 fileManager.removeLineContains(activityContext, returnedText)
-                speak("Usuwam kontakt o nazwie $returnedText", 7)
+                speak(activityContext.getString(R.string.contact_delete) + returnedText, 7)
                 speechManager7.finished.observe(lifecycleOwner, {
                     if (it) {
                         removeContactStarted.value = false
@@ -157,7 +157,8 @@ class CallManager(
                     }
                 })
             } else {
-                speak("Nie ma kontaktu o nazwie $returnedText. Jeśli chcesz usunąć kontakt rozpocznij usuwanie ponownie", 2)
+                speak(activityContext.getString(R.string.contact_no_contact) +  returnedText
+                        + activityContext.getString(R.string.contact_delete_again), 2)
                 removeContactStarted.value = false
                 updateUIDelete.value = false
                 addButton.isClickable = true
@@ -172,14 +173,14 @@ class CallManager(
                     }
                 })
             } else {
-                speak("Nie ma kontaktu o nazwie $returnedText", 2)
+                speak(activityContext.getString(R.string.contact_no_contact) + returnedText, 2)
             }
         }
     }
 
 
     /**
-     * Function to listen to input voice
+     * Function that listens to input voice
      */
     fun listen() {
         if (addContactNumber.value == false) {
@@ -194,8 +195,9 @@ class CallManager(
         speechManager.stopSpeaking()
     }
 
-    /**
-     * Calls speechManager speakOut method with given text
+    /** Chooses instance of Speech manager and triggers its speakOut function
+     * @param text - text o to be read
+     * @param instanceId - id of Speech manager instance
      */
     fun speak(text: String, instanceId: Int) {
         when (instanceId) {
@@ -218,6 +220,9 @@ class CallManager(
                 speechManager6.speakWithObservable(text)
             }
             7 -> {
+                speechManager7.speakWithObservable(text)
+            }
+            8 -> {
                 speechManager7.speakWithObservable(text)
             }
         }
@@ -248,6 +253,10 @@ class CallManager(
     /**
      * Function to handle the beginning of contact add
      * also updates image button icons and colors
+     * @param callButton - button to manage voice input
+     * @param addButton - button clicked to star contact addition
+     * @param removeButton - button clicked to start removing contact process (will be grayed out during
+     * this method)
      */
     fun handleContactAdd(
         callButton: ImageButton,
@@ -262,7 +271,7 @@ class CallManager(
         callButton.isClickable = false
         if (addContactStarted.value == false) {
             speak(
-                "Aby dodać nazwę kontaktu przytrzymaj przycisk ze słuchawką i wypowiedz jego nazwę.",
+                activityContext.getString(R.string.contact_add_contact_start),
                 1
             )
             speechManager.finished.observe(lifecycleOwner, {
@@ -275,7 +284,7 @@ class CallManager(
                 }
             })
         } else {
-            speak("Wyjście z dodawania kontaktu", 2)
+            speak(activityContext.getString(R.string.contact_exit_add), 2)
             speechManagerSecond.finished.observe(lifecycleOwner, {
                 if (it) {
                     addContactStarted.value = false
@@ -290,10 +299,15 @@ class CallManager(
         }
     }
 
+    /**
+     * Function that checks if given contact name has appropriate length. Adds contact to contact list.
+     * @param contactNumber - contact number
+     * @param numericKeyboard - layout with numeric keyboard to make it invisible
+     */
     fun handleCheckNumber(contactNumber: String, numericKeyboard: View) {
         var contact = contactNumber
         if (contact.length != 9) {
-            speak("Numer kontaktu za krótki. Wprowadź ponownie", 1)
+            speak(activityContext.getString(R.string.contact_number_wrong_length), 1)
             speechManager.finished.observe(lifecycleOwner, {
                 if (it) {
                     contact = ""
@@ -306,9 +320,10 @@ class CallManager(
                 activityContext
             )
             speak(
-                "Poprawnie dodano kontakt o nazwie ${temporaryContact.contactName} i numerze" +
-                        " ${temporaryContact.contactNumber}", 3
-            )
+                activityContext.getString(R.string.contact_succes_add) +
+                        temporaryContact.contactName +
+        activityContext.getString(R.string.contact_succes_add_number)+
+                        temporaryContact.contactNumber, 3)
             speechManagerThird.finished.observe(lifecycleOwner, {
                 if (it) {
                     println(contact)
@@ -324,6 +339,12 @@ class CallManager(
         }
     }
 
+    /**
+     * Function to remove existing contact by speaking its name
+     * @param callButton - button that manages voice input
+     * @param removeButton - button clicked to start removing process
+     * @param addButton - button to ad contact (will be grayed out during removal)
+     */
     fun handleRemoveContact(callButton: ImageButton, removeButton: ImageButton, addButton: ImageButton) {
         this.callButton = callButton
         this.removeButton = removeButton
@@ -331,7 +352,7 @@ class CallManager(
         longPressActivated.value = false
         callButton.isClickable = false
         if (removeContactStarted.value == false) {
-            speak("Aby usunąć kontakt przytrzymaj przycisk słuchawki i wypowiedz jego nazwę.", 6)
+            speak(activityContext.getString(R.string.contact_remove_start), 6)
             speechManager6.finished.observe(lifecycleOwner, {
                 if (it) {
                     removeContactStarted.value = true
@@ -343,8 +364,8 @@ class CallManager(
             })
         } else {
 
-            speak("Wyjście z usuwania kontaktu", 2)
-            speechManagerSecond.finished.observe(lifecycleOwner, {
+            speak(activityContext.getString(R.string.contact_exit_remove), 8)
+            speechManager8.finished.observe(lifecycleOwner, {
                 if (it) {
                     removeContactStarted.value = false
                     callButton.isClickable = false

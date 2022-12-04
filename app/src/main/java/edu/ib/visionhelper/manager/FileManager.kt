@@ -1,15 +1,20 @@
 package edu.ib.visionhelper.manager
 
 import android.content.Context
-import android.telecom.Call
 import edu.ib.visionhelper.call.CallListElement
 import java.io.*
 import java.lang.Exception
 
+/**
+ * File manager for contacts management
+ */
 class FileManager {
 
-    var text: String? = null
-
+    /**
+     * Writes new contact to contacts.txt file
+     * @param content - contact to be added
+     * @param mcoContext - activity context
+     */
     fun writeToInternal(content: String, mcoContext: Context) {
         val fileOutputStream: FileOutputStream
         try {
@@ -18,9 +23,13 @@ class FileManager {
         }catch (e: Exception){
             e.printStackTrace()
         }
-
     }
 
+    /**
+     * Function to read all contacts and decode to list of CallListElement
+     * @param mcoContext - activity context
+     * @return List<CallListElement> - list of contacts
+     */
     fun readFile(mcoContext: Context): List<CallListElement> {
         val contactList: MutableList<CallListElement> = mutableListOf()
         if(!File(mcoContext.filesDir.absolutePath +"/contacts.txt").exists()){
@@ -48,6 +57,11 @@ class FileManager {
         return contactList
     }
 
+    /**
+     * Function to remove existing contact from file
+     * @param context - activity cvontext
+     * @param matchingText - contact name to be deleted
+     */
     fun removeLineContains(context: Context, matchingText: String){
         val file = File(context.filesDir.absolutePath + "/contacts.txt")
         val tempFile = File(context.filesDir.absolutePath + "/tempContacts.txt")

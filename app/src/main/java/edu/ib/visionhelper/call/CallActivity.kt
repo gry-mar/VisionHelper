@@ -17,8 +17,6 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
     private lateinit var keyboardLayout: LinearLayout
-    private lateinit var itemSelected: CallListElement
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +67,6 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
             }
         })
 
-
-
         callButton.setOnClickListener{
                     handleContactNumberAdd()
             }
@@ -80,21 +76,16 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         })
         viewManager.speechManagerThird.finished.observe( this, {
             if(it){
-                finish();
-                startActivity(intent);
-
-
+                finish()
+                startActivity(intent)
             }
         })
         viewManager.speechManager7.finished.observe( this, {
             if(it){
-                finish();
-                startActivity(intent);
-
-
+                finish()
+                startActivity(intent)
             }
         })
-
 
         val helperButton = findViewById<ImageButton>(R.id.helperCallButton)
         helperButton.setOnClickListener {
@@ -125,7 +116,6 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         })
 
     }
-
 
     public override fun onDestroy() {
         // Shutdown TTS when

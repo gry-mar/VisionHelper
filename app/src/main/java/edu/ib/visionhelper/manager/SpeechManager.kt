@@ -14,15 +14,8 @@ import edu.ib.visionhelper.zoomview.ZoomViewActivity
 import java.util.*
 import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.Tasks.await
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
-
 
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
@@ -81,6 +74,10 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
 
     }
 
+    /**
+     * Function that reads given text with TTS. It is variant with MutableLiveData set
+     * @param text - text to be spoken
+     */
     fun speakWithObservable(text: String){
         finished.value = false
         textToSpeech.setSpeechRate(1.1f)
@@ -94,20 +91,15 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
                     finished.setValue(false)
                 }
             }
-
             override fun onDone(utteranceId: String) {
 
                     isFinishedSpeaking = 1
                 MainScope().launch {
                     finished.setValue(true)
                 }
-
-
-
                 Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
 
             }
-
             override fun onError(utteranceId: String) {
 
             }
@@ -125,8 +117,6 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
                 installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
                 context.startActivity(installIntent)
             }
-
-
 
             if (preferences!!.mainFirstTimeLaunched == 0 && context is MainActivity) {
                speakOut(context.getString(R.string.main_helper_text))
