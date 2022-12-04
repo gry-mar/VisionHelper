@@ -70,7 +70,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="4" />
              <Space
                  android:layout_width="wrap_content"
@@ -82,7 +81,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="5" />
              <Space
                  android:layout_width="wrap_content"
@@ -94,7 +92,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="6" />
              <Space
                  android:layout_width="wrap_content"
@@ -114,7 +111,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="7" />
                  <Space
                      android:layout_width="wrap_content"
@@ -126,7 +122,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="8" />
                  <Space
                      android:layout_width="wrap_content"
@@ -138,7 +133,6 @@
                 android:layout_height="110sp"
                 style="@style/ButtonKeyboard"
                 android:layout_weight="1"
-                app:tint="@color/green"
                 android:text="9" />
 
                  <Space
@@ -148,20 +142,25 @@
 
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent" android:layout_gravity="center"
         android:layout_height="wrap_content" android:orientation="horizontal">
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
         <Button
             android:id="@+id/button0"
             android:layout_width="110sp"
             android:layout_height="110sp"
             style="@style/ButtonKeyboard"
-            android:layout_weight="1"
-            app:tint="@color/green"
+            android:layout_weight="0"
             android:text="0" />
         <Space
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
+
+
 
     </LinearLayout>
     <ImageButton

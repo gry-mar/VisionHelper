@@ -6,8 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.impl.Observable
-import androidx.lifecycle.Observer
 import edu.ib.visionhelper.R
 import kotlinx.android.synthetic.main.activity_call.*
 
@@ -19,6 +17,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
     private lateinit var keyboardLayout: LinearLayout
+    private lateinit var itemSelected: CallListElement
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,37 +26,73 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         viewManager = CallManager(this, this, this)
 
         keyboardLayout = findViewById(R.id.numericKeyboard)
+        val addContactButton = findViewById<ImageButton>(R.id.addContactButton)
         val callButton = findViewById<ImageButton>(R.id.callContactButton)
         callButton.setOnLongClickListener {
                     viewManager.listen()
-
             true
         }
 
-        val addContactButton = findViewById<ImageButton>(R.id.addContactButton)
-        addContactButton.setOnClickListener{
-            viewManager.handleContactAdd(callButton, addContactButton)
-           // callButton.setBackgroundResource(R.drawable.shape_circle_green)
-            //addContactButton.setImageResource(R.drawable.ic_cancel)
-
+        val deleteContactButton = findViewById<ImageButton>(R.id.deleteContactButton)
+        deleteContactButton.setOnClickListener{
+            viewManager.handleRemoveContact(callButton, deleteContactButton, addContactButton)
         }
-        viewManager.updateUI.observe(this, Observer {
+        addContactButton.setOnClickListener{
+            viewManager.handleContactAdd(callButton, addContactButton, deleteContactButton)
+        }
+        viewManager.updateUI.observe(this, {
             if(it){
                 callButton.setBackgroundResource(R.drawable.shape_circle_green)
                 addContactButton.setImageResource(R.drawable.ic_cancel)
+                    deleteContactButton.setColorFilter(R.color.black)
+                    deleteContactButton.isEnabled = false
+                deleteContactButton.isClickable = false
             }
             else {
                 callButton.setBackgroundResource(R.drawable.shape_circle_blue)
                 addContactButton.setImageResource(R.drawable.ic_add_note)
+                deleteContactButton.clearColorFilter()
+                deleteContactButton.isEnabled = true
+                deleteContactButton.isClickable = true
             }
         })
+
+        viewManager.updateUIDelete.observe(this, {
+            if(it){
+                deleteContactButton.setImageResource(R.drawable.ic_cancel_red)
+                callButton.setBackgroundResource(R.drawable.shape_circle_red)
+                addContactButton.setColorFilter(R.color.black)
+            } else {
+                callButton.setBackgroundResource(R.drawable.shape_circle_blue)
+                deleteContactButton.setImageResource(R.drawable.ic_remove_contact)
+                addContactButton.clearColorFilter()
+            }
+        })
+
+
 
         callButton.setOnClickListener{
                     handleContactNumberAdd()
             }
-        viewManager.longPressActivated.observe(this, Observer {
+        viewManager.longPressActivated.observe(this, {
             callButton.isLongClickable = it
             callButton.isClickable = !it
+        })
+        viewManager.speechManagerThird.finished.observe( this, {
+            if(it){
+                finish();
+                startActivity(intent);
+
+
+            }
+        })
+        viewManager.speechManager7.finished.observe( this, {
+            if(it){
+                finish();
+                startActivity(intent);
+
+
+            }
         })
 
 
@@ -68,7 +103,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
                     viewManager.stopSpeaking()
                     false
                 } else {
-                    viewManager.speak(getString(R.string.call_helper_text))
+                    viewManager.speak(getString(R.string.call_helper_text), 1)
                     true
                 }
             }else{
@@ -88,6 +123,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
                 viewManager.stopSpeaking()
             }
         })
+
     }
 
 
@@ -153,51 +189,51 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         Log.i("logTag", "on event")
     }
 
-    fun handleContactNumberAdd() {
+    private fun handleContactNumberAdd() {
         if (viewManager.addContactNumber.value == true) {
-            keyboardLayout.visibility = View.VISIBLE;
+            keyboardLayout.visibility = View.VISIBLE
             var contactNumber = ""
-            val button1 = findViewById<Button>(R.id.button1);
+            val button1 = findViewById<Button>(R.id.button1)
             button1.setOnClickListener {
                 contactNumber += "1"
             }
-            val button2 = findViewById<Button>(R.id.button2);
+            val button2 = findViewById<Button>(R.id.button2)
             button2.setOnClickListener {
                 contactNumber += "2"
             }
-            val button3 = findViewById<Button>(R.id.button3);
+            val button3 = findViewById<Button>(R.id.button3)
             button3.setOnClickListener {
                 contactNumber += "3"
             }
-            val button4 = findViewById<Button>(R.id.button4);
+            val button4 = findViewById<Button>(R.id.button4)
             button4.setOnClickListener {
                 contactNumber += "4"
             }
-            val button5 = findViewById<Button>(R.id.button5);
+            val button5 = findViewById<Button>(R.id.button5)
             button5.setOnClickListener {
                 contactNumber += "5"
             }
-            val button6 = findViewById<Button>(R.id.button6);
+            val button6 = findViewById<Button>(R.id.button6)
             button6.setOnClickListener {
                 contactNumber += "6"
             }
-            val button7 = findViewById<Button>(R.id.button7);
+            val button7 = findViewById<Button>(R.id.button7)
             button7.setOnClickListener {
                 contactNumber += "7"
             }
-            val button8 = findViewById<Button>(R.id.button8);
+            val button8 = findViewById<Button>(R.id.button8)
             button8.setOnClickListener {
                 contactNumber += "8"
             }
-            val button9 = findViewById<Button>(R.id.button9);
+            val button9 = findViewById<Button>(R.id.button9)
             button9.setOnClickListener {
                 contactNumber += "9"
             }
-            val button0 = findViewById<Button>(R.id.button0);
+            val button0 = findViewById<Button>(R.id.button0)
             button0.setOnClickListener {
                 contactNumber += "0"
             }
-            println("Contact number" + contactNumber)
+            println("Contact number$contactNumber")
             val buttonConfirm = findViewById<ImageButton>(R.id.buttonConfirmContactNumber)
             buttonConfirm.setOnClickListener {
                 viewManager.handleCheckNumber(contactNumber, numericKeyboard)
