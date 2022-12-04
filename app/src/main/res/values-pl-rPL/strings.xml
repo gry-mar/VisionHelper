@@ -28,4 +28,7 @@
     <string name="contact_succes_add_number">" i numerze: "</string>
     <string name="contact_number_wrong_length">Numer kontaktu ma niepoprawną długość. Wpisz ponownie i zatwierdź</string>
     <string name="contact_delete_again">Jeśli chcesz usunąć kontakt rozpocznij proces usuwania od nowa.</string>
+    <string name="note_title_is">"Tytuł notatki to: "</string>
+    <string name="press_again_note">Naciśnij i przytrymaj ponownie aby dodać treść notatki</string>
+    <string name="notes_add_note_start">Aby dodać nową notatkę przytrzymaj przycisk dodawania i wypowiedz jej tytuł</string>
 </resources>
