@@ -13,17 +13,21 @@ import edu.ib.visionhelper.notes.NotesActivity
 import edu.ib.visionhelper.zoomview.ZoomViewActivity
 import java.util.*
 import android.speech.tts.UtteranceProgressListener
-import com.google.android.gms.tasks.Tasks.await
-
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
     private var preferences: PreferencesManager? = null
     var isFinishedSpeaking: Int = 0
-
+    var finished = MutableLiveData<Boolean>(false)
+        private set
     init {
         preferences = PreferencesManager(context)
         textToSpeech = TextToSpeech(context, this)
+        finished.setValue(false)
+        finished.postValue(false)
     }
 
 
@@ -41,19 +45,25 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
      * @param text - text to be read
      */
    fun speakOut(text: String) {
-
+        finished.value = false
         textToSpeech.setSpeechRate(1.1f)
         textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
         textToSpeech.setOnUtteranceProgressListener(object :
             UtteranceProgressListener() {
             override fun onStart(utteranceId: String) {
                 Log.i("TextToSpeech", "On Start")
-                isFinishedSpeaking = 0
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(false)
+                }
             }
 
             override fun onDone(utteranceId: String) {
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(true)
+                }
 
-                isFinishedSpeaking = 1
                 Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
             }
 
@@ -62,6 +72,38 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
             }
         })
 
+    }
+
+    /**
+     * Function that reads given text with TTS. It is variant with MutableLiveData set
+     * @param text - text to be spoken
+     */
+    fun speakWithObservable(text: String){
+        finished.value = false
+        textToSpeech.setSpeechRate(1.1f)
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
+        textToSpeech.setOnUtteranceProgressListener(object :
+            UtteranceProgressListener() {
+            override fun onStart(utteranceId: String) {
+                Log.i("TextToSpeech", "On Start")
+                isFinishedSpeaking = 0
+                MainScope().launch {
+                    finished.setValue(false)
+                }
+            }
+            override fun onDone(utteranceId: String) {
+
+                    isFinishedSpeaking = 1
+                MainScope().launch {
+                    finished.setValue(true)
+                }
+                Log.i("TextToSpeech", "On Done $isFinishedSpeaking")
+
+            }
+            override fun onError(utteranceId: String) {
+
+            }
+        })
     }
 
     override fun onInit(status: Int) {
@@ -75,8 +117,6 @@ class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
                 installIntent.action = TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA
                 context.startActivity(installIntent)
             }
-
-
 
             if (preferences!!.mainFirstTimeLaunched == 0 && context is MainActivity) {
                speakOut(context.getString(R.string.main_helper_text))

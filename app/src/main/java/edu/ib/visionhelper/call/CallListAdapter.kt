@@ -63,7 +63,7 @@ class CallListAdapter(
                 stringArrayWithChars.add(char.toString())
             }
             viewManager.speak(arrayList[item].contactName + ", telefon: " +
-            stringArrayWithChars.toString())
+            stringArrayWithChars.toString(), 1)
         }
         return convertView
     }
