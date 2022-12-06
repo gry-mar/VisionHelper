@@ -1,10 +1,7 @@
 package edu.ib.visionhelper.notes
 
 import android.content.Context
-import android.os.Environment
-import android.util.Log
 import java.io.*
-import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,11 +20,11 @@ class NotesFilesManager {
      * @param mcoContext - activity context
      */
     fun writeToFile(content: String, mcoContext: Context) {
-        val fileOutputStream:FileOutputStream
+        val fileOutputStream: FileOutputStream
         try {
             fileOutputStream = mcoContext.openFileOutput("noteTitles.txt", Context.MODE_APPEND)
             fileOutputStream.write(("$content,").lowercase(Locale.getDefault()).toByteArray())
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -38,7 +35,7 @@ class NotesFilesManager {
      * @return String - sequence of note titles with "," delimiter
      */
     fun readFile(mcoContext: Context): String {
-        if(!File(mcoContext.filesDir.absolutePath +"/noteTitles.txt").exists()){
+        if (!File(mcoContext.filesDir.absolutePath + "/noteTitles.txt").exists()) {
             File(mcoContext.filesDir.absolutePath + "/noteTitles.txt").createNewFile()
         }
         val fileInputStream: FileInputStream? = mcoContext.openFileInput("noteTitles.txt")
@@ -57,44 +54,46 @@ class NotesFilesManager {
      * @param noteTitle - note title to be deleted
      */
     fun deleteFile(noteTitle: String, mcoContext: Context): Boolean {
-        if(!File(mcoContext.filesDir.absolutePath +"/noteTitles.txt").exists()){
+        if (!File(mcoContext.filesDir.absolutePath + "/noteTitles.txt").exists()) {
             File(mcoContext.filesDir.absolutePath + "/noteTitles.txt").createNewFile()
         }
         val fileInputStream: FileInputStream? = mcoContext.openFileInput("noteTitles.txt")
         val inputStreamReader = InputStreamReader(fileInputStream)
         val bufferedReader = BufferedReader(inputStreamReader)
         val stringBuilder: StringBuilder = StringBuilder()
-            stringBuilder.append(bufferedReader.readLine())
+        stringBuilder.append(bufferedReader.readLine())
 
-            val actualTitles: ArrayList<String> = ArrayList()
+        val actualTitles: ArrayList<String> = ArrayList()
 
-            var indexPrevious = 0
-            var index = 0
-            stringBuilder.toString().forEach { char: Char ->
-                if (char == ',') {
-                    actualTitles.add(stringBuilder.substring(indexPrevious, index))
-                    indexPrevious = index + 1
-                }
-                index++
+        var indexPrevious = 0
+        var index = 0
+        stringBuilder.toString().forEach { char: Char ->
+            if (char == ',') {
+                actualTitles.add(stringBuilder.substring(indexPrevious, index))
+                indexPrevious = index + 1
             }
-            if(actualTitles.contains(noteTitle)) {
-                actualTitles.remove(noteTitle)
-                stringBuilder.clear()
-                actualTitles.forEach { title ->
-                    stringBuilder.append("$title,")
-                }
-                val fileOutputStream:FileOutputStream
-                try {
-                    fileOutputStream = mcoContext.openFileOutput("noteTitles.txt", Context.MODE_PRIVATE)
-                    fileOutputStream.write(stringBuilder.toString().lowercase(Locale.getDefault()).toByteArray())
-                }catch (e: Exception){
-                    e.printStackTrace()
-                }
-
-                val dir: File = mcoContext.filesDir
-                val file = File(dir, "/" + noteTitle.replace(' ', '_') + ".mp3")
-                return file.delete()
+            index++
+        }
+        if (actualTitles.contains(noteTitle)) {
+            actualTitles.remove(noteTitle)
+            stringBuilder.clear()
+            actualTitles.forEach { title ->
+                stringBuilder.append("$title,")
             }
+            val fileOutputStream: FileOutputStream
+            try {
+                fileOutputStream = mcoContext.openFileOutput("noteTitles.txt", Context.MODE_PRIVATE)
+                fileOutputStream.write(
+                    stringBuilder.toString().lowercase(Locale.getDefault()).toByteArray()
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            val dir: File = mcoContext.filesDir
+            val file = File(dir, "/" + noteTitle.replace(' ', '_') + ".mp3")
+            return file.delete()
+        }
         return false
     }
 

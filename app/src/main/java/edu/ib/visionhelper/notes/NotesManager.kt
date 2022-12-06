@@ -27,7 +27,7 @@ import kotlin.collections.ArrayList
  * Manager class to handle NotesActivity logic
  */
 @RequiresApi(Build.VERSION_CODES.S)
-class NotesManager(context: Context, val activity: NotesActivity, val lifecycleOwner: LifecycleOwner) {
+class NotesManager(context: Context, val activity: NotesActivity, private val lifecycleOwner: LifecycleOwner) {
 
     private lateinit var removeButton: ImageButton
     private var notesFilesManager: NotesFilesManager = NotesFilesManager()
@@ -95,7 +95,7 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
             }
             index++
         }
-        adapter = NotesListAdapter(context, arrayList, this)
+        adapter = NotesListAdapter(context, arrayList)
 
     }
 
@@ -151,7 +151,7 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
                         }
                         index++
                     }
-                    adapter = NotesListAdapter(activityContext, arrayList, this)
+                    adapter = NotesListAdapter(activityContext, arrayList)
 
                     activity.finish()
                     activity.startActivity(activity.intent)
@@ -179,7 +179,6 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
     /**
      * Handles results of input speech: result text given when new note title is added
      * or title is deleted
-     *
      */
     fun handleResults(results: Bundle?, playStopNotesButton: ImageButton) {
         speechManager.isFinishedSpeaking = 0
@@ -194,8 +193,10 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
         playStopButton.setImageResource(R.drawable.ic_play)
         returnedText = text.lowercase(Locale.getDefault())
         if (addNoteStarted){
-            if(arrayList.contains(returnedText)){
+            if(arrayList.contains(returnedText)) {
                 speak(activityContext.getString(R.string.note_already_exist))
+            }else if(returnedText.length > 30){
+                speak(activityContext.getString(R.string.note_too_long_title))
             }else {
                 speak(
                     activityContext.getString(R.string.note_title_is) + returnedText +
@@ -213,11 +214,10 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
             if(arrayList.contains(returnedText)){
                 arrayList.remove(returnedText)
                 notesFilesManager.deleteFile(returnedText, activityContext)
-                speak(activityContext.getString(R.string.note_title_is) + returnedText)
-                speechManager3.speakWithObservable(activityContext.getString(R.string.notes_remove_start))
+                speechManager3.speakWithObservable(activityContext.getString(R.string.removed_note_title_is)+ returnedText)
                 speechManager3.finished.observe(lifecycleOwner, {
                     if(it){
-                        adapter = NotesListAdapter(activityContext, arrayList, this)
+                        adapter = NotesListAdapter(activityContext, arrayList)
                         activity.finish()
                         activity.startActivity(activity.intent)
                     }
@@ -298,7 +298,7 @@ class NotesManager(context: Context, val activity: NotesActivity, val lifecycleO
                 addButton.isClickable = false
                 addButton.isEnabled = false
                 addButton.setColorFilter(R.color.disabled_gray)
-                activityContext.getString(R.string.notes_remove_start)
+                speak(activityContext.getString(R.string.notes_remove_start))
 
                 removeNoteStarted = true
 

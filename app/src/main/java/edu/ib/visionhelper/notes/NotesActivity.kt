@@ -34,8 +34,8 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
 
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
         helperButton.setOnClickListener {
-            if (!isFirstSpeech) {
-                isSpeaking = if (isSpeaking) {
+            isSpeaking = if (!isFirstSpeech) {
+                if (isSpeaking) {
                     viewManager.stopSpeaking()
                     false
                 } else {
@@ -44,7 +44,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
                 }
             } else {
                 viewManager.stopSpeaking()
-                isSpeaking = false
+                false
             }
             isFirstSpeech = false
         }
@@ -141,6 +141,9 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
     }
 
 
+    /**
+     * Function that redirects to specific handler method to serve logic for voice recognizer
+     */
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onResults(results: Bundle?) {
         viewManager.handleResults(results, playStopNotesButton)

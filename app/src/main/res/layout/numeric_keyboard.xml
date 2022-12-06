@@ -165,12 +165,11 @@
     </LinearLayout>
     <ImageButton
         android:id="@+id/buttonConfirmContactNumber"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:src="@drawable/ic_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_check_125dp"
         android:layout_weight="0.1"
         android:layout_gravity="center"
         android:background="@color/transparent"
-        app:tint="@color/green"
         />
 </LinearLayout>
