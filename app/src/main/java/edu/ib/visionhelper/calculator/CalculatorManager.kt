@@ -1,82 +1,56 @@
 package edu.ib.visionhelper.calculator
 
-import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
 import androidx.core.text.isDigitsOnly
+
 
 class CalculatorManager {
 
-    private var prevNum: Int = 0
-    private var nextNum: Int = 0
-
-    fun sum(prevNum : Int, nextNum : Int): Int {
+    fun sum(prevNum: Int, nextNum: Int): Int {
         return prevNum + nextNum
     }
 
-    fun substract(prevNum : Int, nextNum : Int): Int {
+    fun substract(prevNum: Int, nextNum: Int): Int {
         return prevNum - nextNum
     }
 
-    fun divide(prevNum : Int, nextNum : Int): Int {
+    fun divide(prevNum: Int, nextNum: Int): Int {
         return (prevNum / nextNum)
     }
 
-    fun multiply(prevNum : Int, nextNum : Int): Int {
+    fun multiply(prevNum: Int, nextNum: Int): Int {
         return prevNum * nextNum;
     }
 
-    fun textSeparator(str : String): MutableList<String> {
+    fun textSeparator(str: String): MutableList<String> {
         var delimiter = " "
         val parts = str.split(delimiter)
         val array = parts.toMutableList()
         return array
     }
 
-    fun minusValuesFixDelimiter(arrayString: MutableList<String>, delimiter: String): MutableList<String> {
-        val stringToSplit = arrayString.joinToString(prefix = "", postfix = "", separator = "")
-        val parts = stringToSplit.split(delimiter)
-        arrayString.clear()
-        val arrayString = parts.toMutableList()
-        arrayString.add(1, "-")
-        return arrayString
-    }
-
-    fun minusValuesFix(arrayString: MutableList<String>): MutableList<String> {
-        var returnArray = arrayString
-        if (arrayString.get(0).contains("-"))
-            returnArray = minusValuesFixDelimiter(arrayString, "-")
-        else if (arrayString.get(0).contains("minus"))
-            returnArray = minusValuesFixDelimiter(arrayString, "minus")
-        else if (arrayString.get(0).contains("odjąć"))
-            returnArray = minusValuesFixDelimiter(arrayString, "odjąć")
-        else if (arrayString.get(0).contains("odejmij"))
-            returnArray = minusValuesFixDelimiter(arrayString, "odejmij")
-        else if (arrayString.get(1).contains("-"))
-            returnArray = minusValuesFixDelimiter(arrayString, "-")
-        else if (arrayString.get(1).contains("minus"))
-            returnArray = minusValuesFixDelimiter(arrayString, "minus")
-        else if (arrayString.get(1).contains("odjąć"))
-            returnArray = minusValuesFixDelimiter(arrayString, "odjąć")
-        else if (arrayString.get(1).contains("odejmij"))
-            returnArray = minusValuesFixDelimiter(arrayString, "odejmij")
-
-        return returnArray
-    }
-
+    /**
+     * Function that changes signs from recognized text to unified values
+     */
     fun textOrganizer(arrayString: MutableList<String>): String {
         var sign = "0"
 
         sign = arrayString.get(1)
 
-        if (sign.equals("x") or sign.equals("razy") or sign.equals("X")) {
+        if (sign.equals("x") or sign.equals("razy")) {
             arrayString.set(1, "x")
-        } else if (sign.equals("plus") or sign.equals("dodaj") or sign.equals("+") or sign.equals("dodać")) {
+        } else if (sign.equals("dodaj") or sign.equals("Dodaj") or sign.equals("+") or sign.equals("plus"))
+        {
             arrayString.set(1, "+")
-        } else if (sign.equals("minus") or sign.equals("odejmij") or sign.equals("-") or sign.equals("odjąć")) {
+        } else if (sign.equals("minus") or sign.equals("odejmij") or sign.equals("-") or sign.equals("odjąć"))
+        {
             arrayString.set(1, "-")
-        } else if (sign.equals("/:") or sign.equals("\\:") or sign.equals("podziel") or sign.equals("podzielić") or sign.equals("na")) {
+        } else if (sign.equals("/") or sign.equals("podziel") or sign.equals("Podziel") or sign.equals(":") or sign.equals("podzielić")
+            or sign.equals("na") or sign.equals("przez") or sign.equals("dzielone") or sign.equals("dzielić"))
+        {
+            if (arrayString.get(2).equals("przez") || arrayString.get(2).equals("na"))
+                arrayString.removeAt(2)
             arrayString.set(1, ":")
+
         }
 
         val string = arrayString.joinToString(prefix = "", postfix = "", separator = " ")
@@ -84,91 +58,82 @@ class CalculatorManager {
         return string
     }
 
-    fun textToDigitsChanger(arrayString: MutableList<String>): MutableList<String>{
+    fun textToDigitsChanger(arrayString: MutableList<String>): MutableList<String> {
 
-        var arrayStringFinal = minusValuesFix(arrayString)
+        for (i in 0..arrayString.size - 1)
+            changeDigitsToTextAutomatic(arrayString, i)
 
-        when(arrayStringFinal.get(0)){
-            "zero" -> arrayStringFinal.set(0, "0")
-            "jeden" -> arrayStringFinal.set(0, "1")
-            "dwa" -> arrayStringFinal.set(0, "2")
-            "trzy" -> arrayStringFinal.set(0, "3")
-            "cztery" -> arrayStringFinal.set(0, "4")
-            "pięć" -> arrayStringFinal.set(0, "5")
-            "sześć" -> arrayStringFinal.set(0, "6")
-            "siedem" -> arrayStringFinal.set(0, "7")
-            "osiem" -> arrayStringFinal.set(0, "8")
-            "dziewięć" -> arrayStringFinal.set(0, "9")
-            "dziesięć" -> arrayStringFinal.set(0, "10")
-            "jedenaście" -> arrayStringFinal.set(0, "11")
-            "dwanaście" -> arrayStringFinal.set(0, "12")
-            "trzynaście" -> arrayStringFinal.set(0, "13")
-            "czternaście" -> arrayStringFinal.set(0, "14")
-            "piętnaście" -> arrayStringFinal.set(0, "15")
-            "szesnaście" -> arrayStringFinal.set(0, "16")
-            "siedemnaście" -> arrayStringFinal.set(0, "17")
-            "osiemnaście" -> arrayStringFinal.set(0, "18")
-            "dziewiętnaście" -> arrayStringFinal.set(0, "19")
+        return arrayString
+    }
 
-            else -> println(":)")
-        }
-
-        when(arrayStringFinal.get(2)){
-            "zero" -> arrayStringFinal.set(2, "0")
-            "jeden" -> arrayStringFinal.set(2, "1")
-            "dwa" -> arrayStringFinal.set(2, "2")
-            "trzy" -> arrayStringFinal.set(2, "3")
-            "cztery" -> arrayStringFinal.set(2, "4")
-            "pięć" -> arrayStringFinal.set(2, "5")
-            "sześć" -> arrayStringFinal.set(2, "6")
-            "siedem" -> arrayStringFinal.set(2, "7")
-            "osiem" -> arrayStringFinal.set(2, "8")
-            "dziewięć" -> arrayString.set(2, "9")
-            "dziesięć" -> arrayStringFinal.set(2, "10")
-            "jedenaście" -> arrayStringFinal.set(2, "11")
-            "dwanaście" -> arrayStringFinal.set(2, "12")
-            "trzynaście" -> arrayStringFinal.set(2, "13")
-            "czternaście" -> arrayStringFinal.set(2, "14")
-            "piętnaście" -> arrayStringFinal.set(2, "15")
-            "szesnaście" -> arrayStringFinal.set(2, "16")
-            "siedemnaście" -> arrayStringFinal.set(2, "17")
-            "osiemnaście" -> arrayStringFinal.set(2, "18")
-            "dziewiętnaście" -> arrayStringFinal.set(2, "19")
+    fun changeDigitsToTextAutomatic(arrayString: MutableList<String>, index: Int) {
+        when (arrayString.get(index)) {
+            "zero" -> arrayString.set(index, "0")
+            "jeden" -> arrayString.set(index, "1")
+            "dwa" -> arrayString.set(index, "2")
+            "trzy" -> arrayString.set(index, "3")
+            "cztery" -> arrayString.set(index, "4")
+            "pięć" -> arrayString.set(index, "5")
+            "sześć" -> arrayString.set(index, "6")
+            "siedem" -> arrayString.set(index, "7")
+            "osiem" -> arrayString.set(index, "8")
+            "dziewięć" -> arrayString.set(index, "9")
+            "dziesięć" -> arrayString.set(index, "10")
+            "jedenaście" -> arrayString.set(index, "11")
+            "dwanaście" -> arrayString.set(index, "12")
+            "trzynaście" -> arrayString.set(index, "13")
+            "czternaście" -> arrayString.set(index, "14")
+            "piętnaście" -> arrayString.set(index, "15")
+            "szesnaście" -> arrayString.set(index, "16")
+            "siedemnaście" -> arrayString.set(index, "17")
+            "osiemnaście" -> arrayString.set(index, "18")
+            "dziewiętnaście" -> arrayString.set(index, "19")
 
             else -> println(":)")
         }
-
-        return arrayStringFinal
     }
 
     fun textAnalizer(arrayString: MutableList<String>): Int {
-        var numberToHold = 0
         var numberFirst = 0
         var numberSecond = 0
         var sign = "0"
         var finalNumber = 0
 
-        numberFirst = Integer.parseInt(arrayString.get(0))
-
-        sign = arrayString.get(1)
-        if (arrayString.get(2).isDigitsOnly()) {
+        if (arrayString.size == 3) {
+            numberFirst = Integer.parseInt(arrayString.get(0))
+            sign = arrayString.get(1)
             numberSecond = Integer.parseInt(arrayString.get(2))
-        } else {
-            numberSecond = Integer.parseInt(arrayString.get(3))
+        } else if (arrayString.size == 4) {
+            numberFirst = Integer.parseInt(arrayString.get(0))
+            sign = arrayString.get(1)
+
+            if (arrayString.get(2).equals("minus"))
+                numberSecond = -Integer.parseInt(arrayString.get(3))
+            else
+                numberSecond = Integer.parseInt(arrayString.get(3))
         }
 
-        if (sign.equals("x") or sign.equals("razy") or sign.equals("X")) {
+        if (sign.equals("x") or sign.equals("razy")) {
             finalNumber = multiply(numberFirst, numberSecond)
-        } else if (sign.equals("plus") or sign.equals("dodaj") or sign.equals("+") or sign.equals("dodać")) {
+        } else if (sign.equals("Dodaj") or sign.equals("dodaj") or sign.equals("+") or sign.equals("plus")) {
             finalNumber = sum(numberFirst, numberSecond)
         } else if (sign.equals("minus") or sign.equals("odejmij") or sign.equals("-") or sign.equals("odjąć")) {
             finalNumber = substract(numberFirst, numberSecond)
-        } else if (sign.equals("/:") or sign.equals("\\:") or sign.equals("podziel") or sign.equals("podzielić") or sign.equals("na")) {
+        } else if (sign.equals("/") or sign.equals("podziel") or sign.equals("Podziel") or sign.equals(":") or sign.equals("podzielić")
+            or sign.equals("na") or sign.equals("przez") or sign.equals("dzielone") or sign.equals("dzielić")) {
             finalNumber = divide(numberFirst, numberSecond)
         }
-
         return finalNumber
+    }
 
+    /**
+     * Function that checks if first item of an array is a digit
+     */
+    fun checkIfDigit(arrayString: MutableList<String>): Boolean {
+        if (!arrayString.get(0).isDigitsOnly())
+            return true
+        else
+            return false
     }
 
 }

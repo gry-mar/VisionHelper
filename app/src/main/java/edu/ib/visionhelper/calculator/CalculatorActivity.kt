@@ -1,8 +1,11 @@
 package edu.ib.visionhelper.calculator
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -37,6 +40,8 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
     private var preferences: PreferencesManager? = null
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -147,24 +152,39 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Function that prints out information at the begining of voice recognition
+     */
     override fun onBeginningOfSpeech() {
         Log.i(logTag, "onBeginningOfSpeech")
     }
 
+    /**
+     * Function that prints out information during the voice recognition
+     */
     override fun onRmsChanged(p0: Float) {
         Log.i(logTag, "DuringRecognition")
     }
 
+    /**
+     * Function that prints out information at the end of voice recognition
+     */
     override fun onEndOfSpeech() {
         Log.i(logTag, "onEndOfSpeech")
     }
 
+    /**
+     * Function that prints out error when any occurs
+     */
     override fun onError(error: Int) {
         val errorMessage: String = getErrorText(error)
         Log.d(logTag, "FAILED $errorMessage")
         returnedText.text = errorMessage
     }
 
+    /**
+     * Function that chooses proper error
+     */
     private fun getErrorText(error: Int): String {
         var message = ""
         message = when (error) {
@@ -182,28 +202,52 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         return message
     }
 
+    /**
+     * Function that reformats recognized text, performs the math operation and speaks out the result
+     */
     override fun onResults(results: Bundle?) {
         Log.i(logTag, "onResults")
+
         val matches = results!!.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         var text = ""
-        if (matches != null) {
-            for (result in matches) text = """
-          $result
-          """.trimIndent()
+
+        for (match in matches!!){
+            if(match.contains(" ")){
+                text = match.toString()
+                break
+            }
         }
+
         textArray = calculatorManager.textSeparator(text)
+
+        if(calculatorManager.checkIfDigit(textArray)){
+            val sharedPreference =  getSharedPreferences("PREFERENCE_NAME",Context.MODE_PRIVATE)
+            var firstNumber = sharedPreference.getInt("finalResultCalculator",1)
+            textArray.add(0, firstNumber.toString())
+        }
+
+        println(textArray + "!")
+
         textWithDigistFixed = calculatorManager.textToDigitsChanger(textArray)
+        println(textWithDigistFixed + "@")
         returnedText.text = calculatorManager.textOrganizer(textWithDigistFixed)
+
         finalNumber = calculatorManager.textAnalizer(textWithDigistFixed)
         finalText.text = finalNumber.toString()
+
+        val sharedPreference =  getSharedPreferences("PREFERENCE_NAME",Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
+
+        editor.putInt("finalResultCalculator",finalNumber)
+        editor.apply()
 
         speechManager.speakOut(finalNumber.toString())
     }
 
-
+    /**
+     * Function that shutdowns the manager when activity is destroyed
+     */
     public override fun onDestroy() {
-        // Shutdown TTS when
-        // activity is destroyed
         speechManager.stopSpeaking()
         super.onDestroy()
     }
