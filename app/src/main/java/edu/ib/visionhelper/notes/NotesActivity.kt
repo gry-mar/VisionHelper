@@ -1,6 +1,5 @@
 package edu.ib.visionhelper.notes
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -13,17 +12,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
 import kotlinx.android.synthetic.main.activity_notes.*
-import android.widget.AdapterView
-
-import android.widget.AdapterView.OnItemClickListener
-
-
 
 
 class NotesActivity : AppCompatActivity(), RecognitionListener {
 
     lateinit var listView: ListView
-    private lateinit var speechManager: NotesManager
+    private lateinit var viewManager: NotesManager
     private var isSpeaking: Boolean = false
     private var isFirstSpeech: Boolean = true
 
@@ -32,37 +26,48 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
-        speechManager = NotesManager(this, this)
+        viewManager = NotesManager(this, this, this)
 
         listView = findViewById(R.id.listNotes)
 
-        listView.adapter = speechManager.adapter
+        listView.adapter = viewManager.adapter
 
         val helperButton = findViewById<ImageButton>(R.id.helperNotesButton)
         helperButton.setOnClickListener {
             if (!isFirstSpeech) {
                 isSpeaking = if (isSpeaking) {
-                    speechManager.stopSpeaking()
+                    viewManager.stopSpeaking()
                     false
                 } else {
-                    speechManager.speak(getString(R.string.notes_helper_text))
+                    viewManager.speak(getString(R.string.notes_helper_text))
                     true
                 }
             } else {
-                speechManager.stopSpeaking()
+                viewManager.stopSpeaking()
                 isSpeaking = false
             }
             isFirstSpeech = false
         }
-
+        val removeNoteButton = findViewById<ImageButton>(R.id.removeNoteButton)
         val addNoteButton = findViewById<ImageButton>(R.id.addNoteButton)
         addNoteButton.setOnClickListener {
-            speechManager.handleAddButton(addNoteButton)
+            viewManager.handleAddButton(addNoteButton, removeNoteButton)
         }
 
         addNoteButton.setOnLongClickListener {
-            if (speechManager.addNoteStarted && !speechManager.addNoteMessage) {
-                speechManager.listen()
+            if (viewManager.addNoteStarted && !viewManager.addNoteMessage && !viewManager.isRecordingStarted) {
+                viewManager.listen()
+            }
+            true
+        }
+
+        removeNoteButton.setOnClickListener {
+            viewManager.handleRemoveButton(removeNoteButton, addNoteButton)
+        }
+
+        removeNoteButton.setOnLongClickListener {
+            if (viewManager.removeNoteStarted && !viewManager.isRecordingStarted) {
+                viewManager.listen()
             }
             true
         }
@@ -70,16 +75,16 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         val playStopNoteButton = findViewById<ImageButton>(R.id.playStopNotesButton)
 
         playStopNoteButton.setOnClickListener {
-            speechManager.handlePlayStopButton(playStopNoteButton)
+            viewManager.handlePlayStopButton(playStopNoteButton, addNoteButton, removeNoteButton)
         }
 
         listView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(p0: AbsListView?, FirstVisibleItem: Int, i2: Int, i3: Int) {
-                speechManager.stopSpeaking()
+                viewManager.stopSpeaking()
             }
 
             override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
-                speechManager.stopSpeaking()
+                viewManager.stopSpeaking()
             }
         })
     }
@@ -88,7 +93,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
     public override fun onDestroy() {
         // Shutdown TTS when
         // activity is destroyed
-        speechManager.stopSpeaking()
+        viewManager.stopSpeaking()
         super.onDestroy()
     }
 
@@ -116,7 +121,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
     override fun onError(error: Int) {
         val errorMessage: String = getErrorText(error)
         Log.d("tag", "FAILED $errorMessage")
-        speechManager.returnedText = errorMessage
+        viewManager.returnedText = errorMessage
     }
 
     private fun getErrorText(error: Int): String {
@@ -138,7 +143,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onResults(results: Bundle?) {
-        speechManager.handleResults(results, playStopNotesButton)
+        viewManager.handleResults(results, playStopNotesButton)
     }
 
     override fun onPartialResults(partialResults: Bundle?) {

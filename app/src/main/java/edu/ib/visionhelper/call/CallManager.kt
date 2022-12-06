@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import edu.ib.visionhelper.R
-import edu.ib.visionhelper.manager.FileManager
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.SpeechRecognizerManager
@@ -55,7 +54,7 @@ class CallManager(
         private set
     var addContactNumber = MutableLiveData(false)
         private set
-    private var fileManager: FileManager = FileManager()
+    private var callFilesManager: CallFilesManager = CallFilesManager()
     private var temporaryContact = CallListElement("", 0)
     private lateinit var callButton: ImageButton
     private lateinit var addButton: ImageButton
@@ -97,8 +96,8 @@ class CallManager(
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
         recognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
-        arrayList = fileManager.readFile(activityContext) as ArrayList<CallListElement>
-        fileManager.readFile(activityContext)
+        arrayList = callFilesManager.readFile(activityContext) as ArrayList<CallListElement>
+        callFilesManager.readFile(activityContext)
         adapter = CallListAdapter(context, arrayList, this)
     }
 
@@ -154,7 +153,7 @@ class CallManager(
         } else if (removeContactStarted.value == true) {
             if (temporaryContactNameList.contains(returnedText)) {
                 println(returnedText)
-                fileManager.removeLineContains(activityContext, returnedText)
+                callFilesManager.removeLineContains(activityContext, returnedText)
                 speak(activityContext.getString(R.string.contact_delete) + returnedText, 7)
                 speechManager7.finished.observe(lifecycleOwner, {
                     if (it) {
@@ -323,7 +322,7 @@ class CallManager(
             })
         } else {
             temporaryContact.contactNumber = contact.toLong()
-            fileManager.writeToInternal(
+            callFilesManager.writeToInternal(
                 "${temporaryContact.contactName};${temporaryContact.contactNumber}",
                 activityContext
             )

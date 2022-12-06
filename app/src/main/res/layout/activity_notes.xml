@@ -26,6 +26,15 @@
             android:layout_height="260dp"
             android:orientation="vertical" />
 
+    <ImageButton
+        android:id="@+id/playStopNotesButton"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_play"
+        app:tint="@color/green" />
+
     <LinearLayout
         android:layout_width="375dp"
         android:layout_height="wrap_content"
@@ -35,24 +44,24 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/playStopNotesButton"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:id="@+id/addNoteButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_play"
-            app:tint="@color/green" />
+            android:src="@drawable/ic_add_note"
+            app:tint="@color/yellow" />
 
         <Space
             android:layout_width="72sp"
             android:layout_height="match_parent" />
 
         <ImageButton
-            android:id="@+id/addNoteButton"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:id="@+id/removeNoteButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_add_note"
-            app:tint="@color/yellow" />
+            android:src="@drawable/ic_remove_red"
+            app:tint="@color/red" />
 
     </LinearLayout>
 

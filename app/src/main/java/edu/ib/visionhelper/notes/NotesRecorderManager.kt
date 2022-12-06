@@ -5,11 +5,9 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import edu.ib.visionhelper.manager.FileManager
-import java.io.File
+import edu.ib.visionhelper.call.CallFilesManager
 import java.io.IOException
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -18,7 +16,6 @@ class NotesRecorderManager(context: Context, val activity: NotesActivity, noteTi
     private var output: String? = null
     private var mediaRecorder: MediaRecorder? = null
     private var state: Boolean = false
-    private var fileManager: FileManager = FileManager()
     private var activityContext = context
     var mMediaPlayer: MediaPlayer? = null
 
@@ -26,7 +23,7 @@ class NotesRecorderManager(context: Context, val activity: NotesActivity, noteTi
         val dir = context.filesDir.absolutePath
 
         if(noteTitle != "") {
-            var noteTitleReplaced = noteTitle.replace(' ', '_');
+            var noteTitleReplaced = noteTitle.lowercase().replace(' ', '_');
             output = "$dir/$noteTitleReplaced.mp3"
             mediaRecorder = MediaRecorder()
             mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -63,7 +60,7 @@ class NotesRecorderManager(context: Context, val activity: NotesActivity, noteTi
     // starts playback
     fun playSound(filename: String) {
         mMediaPlayer = MediaPlayer.create(activityContext, Uri.parse(activityContext.filesDir.absolutePath
-            + "/" + filename + ".mp3") )
+            + "/" + filename.lowercase() + ".mp3") )
         mMediaPlayer?.isLooping = true
         mMediaPlayer?.start()
     }

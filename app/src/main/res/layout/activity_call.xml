@@ -70,7 +70,7 @@
             android:layout_weight="0.1"
             android:paddingBottom="16sp"
             android:background="@color/transparent"
-            android:src="@drawable/ic_remove_contact" />
+            android:src="@drawable/ic_remove_red" />
 
     </LinearLayout>
     </LinearLayout>

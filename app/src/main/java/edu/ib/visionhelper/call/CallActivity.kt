@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.utils.VibrateUtil
 import kotlinx.android.synthetic.main.activity_call.*
 
 
@@ -62,13 +63,14 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
                 addContactButton.setColorFilter(R.color.black)
             } else {
                 callButton.setBackgroundResource(R.drawable.shape_circle_blue)
-                deleteContactButton.setImageResource(R.drawable.ic_remove_contact)
+                deleteContactButton.setImageResource(R.drawable.ic_remove_red)
                 addContactButton.clearColorFilter()
             }
         })
 
         callButton.setOnClickListener{
-                    handleContactNumberAdd()
+            VibrateUtil(this).vibrate(250)
+            handleContactNumberAdd()
             }
         viewManager.longPressActivated.observe(this, {
             callButton.isLongClickable = it
@@ -185,47 +187,58 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
             var contactNumber = ""
             val button1 = findViewById<Button>(R.id.button1)
             button1.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "1"
             }
             val button2 = findViewById<Button>(R.id.button2)
             button2.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "2"
             }
             val button3 = findViewById<Button>(R.id.button3)
             button3.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "3"
             }
             val button4 = findViewById<Button>(R.id.button4)
             button4.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "4"
             }
             val button5 = findViewById<Button>(R.id.button5)
             button5.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "5"
             }
             val button6 = findViewById<Button>(R.id.button6)
             button6.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "6"
             }
             val button7 = findViewById<Button>(R.id.button7)
             button7.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "7"
             }
             val button8 = findViewById<Button>(R.id.button8)
             button8.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "8"
             }
             val button9 = findViewById<Button>(R.id.button9)
             button9.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "9"
             }
             val button0 = findViewById<Button>(R.id.button0)
             button0.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 contactNumber += "0"
             }
             println("Contact number$contactNumber")
             val buttonConfirm = findViewById<ImageButton>(R.id.buttonConfirmContactNumber)
             buttonConfirm.setOnClickListener {
+                VibrateUtil(this).vibrate(150)
                 viewManager.handleCheckNumber(contactNumber, numericKeyboard)
                 contactNumber = ""
             }

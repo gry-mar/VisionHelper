@@ -81,11 +81,8 @@ class NotesListAdapter(
             val selectedItem = arrayList[item]
 
             lastSelected = selectedItem
-            viewManager.speak(arrayList[position])
-            while (viewManager.speechManager.isFinishedSpeaking == 0) {
-            }
+            //viewManager.speak(arrayList[position])
             notifyDataSetChanged()
-
         }
         return convertView
     }
