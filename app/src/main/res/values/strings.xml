@@ -80,9 +80,10 @@
 
     <string name="notes_add_note_start">To add new note hold the yellow button and say title of the note.</string>
     <string name="notes_remove_start">To remove note hold the red button and say title of the note.</string>
-    <string name="removed_note_title_is">Removed note : </string>
+    <string name="removed_note_title_is"> has been removed.</string>
     <string name="note_exit_add">Exiting note add</string>
     <string name="note_already_exist">Note with such title already exists.</string>
     <string name="note_doesnt_exist">Note with such title does not exist.</string>
     <string name="note_exit_remove">Exiting note remove</string>
+    <string name="note_too_long_title">The title is too long. It should have below 30 characters.</string>
 </resources>

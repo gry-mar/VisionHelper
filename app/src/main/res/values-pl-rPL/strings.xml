@@ -32,9 +32,11 @@
     <string name="press_again_note">Kliknij na zielony przycisk aby rozpocząć nagrywanie notatki.</string>
     <string name="notes_add_note_start">Aby dodać nową notatkę przytrzymaj przycisk dodawania i wypowiedz jej tytuł</string>
     <string name="notes_remove_start">Aby usunąć notatkę przytrzymaj czerwony przycisk usuwania i wypowiedz jego tytuł</string>
-    <string name="removed_note_title_is">Usunięto notatkę : </string>
+    <string name="removed_note_title_is">Usunięto : </string>
     <string name="note_exit_add">Wyjście z dodawania notatki</string>
     <string name="note_already_exist">Notatka o takim tytule już istnieje.</string>
     <string name="note_doesnt_exist">Notatka o takim tytule nie istnieje.</string>
     <string name="note_exit_remove">Wyjście z usuwania notatki</string>
+    <string name="note_too_long_title">Tytuł jest za długi. Musi mieć poniżej trzydziestu znaków.</string>
+
 </resources>

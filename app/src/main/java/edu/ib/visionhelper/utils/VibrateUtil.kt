@@ -6,8 +6,15 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 
+/**
+ * Class which manages vibrating mode
+ */
 class VibrateUtil(var context: Context) {
 
+    /**
+     * Method that triggers vibrating the phone
+     * @param miliseconds - time of vibrating in miliseconds
+     */
     fun vibrate(miliseconds: Long){
         val vib = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val vibratorManager =
