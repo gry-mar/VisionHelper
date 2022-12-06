@@ -1,14 +1,13 @@
-package edu.ib.visionhelper.manager
+package edu.ib.visionhelper.call
 
 import android.content.Context
-import edu.ib.visionhelper.call.CallListElement
 import java.io.*
 import java.lang.Exception
 
 /**
  * File manager for contacts management
  */
-class FileManager {
+class CallFilesManager {
 
     /**
      * Writes new contact to contacts.txt file

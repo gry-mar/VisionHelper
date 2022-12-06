@@ -1,9 +1,11 @@
 package edu.ib.visionhelper.notes
 
 import android.content.Context
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
-import android.os.Build
-import android.os.Bundle
+import android.graphics.BlendMode
+import android.graphics.PorterDuff
+import android.os.*
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
@@ -11,21 +13,29 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.LifecycleOwner
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.SpeechRecognizerManager
+import edu.ib.visionhelper.utils.VibrateUtil
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Manager class to handle NotesActivity logic
  */
 @RequiresApi(Build.VERSION_CODES.S)
-class NotesManager(context: Context, val activity: NotesActivity) {
+class NotesManager(context: Context, val activity: NotesActivity, private val lifecycleOwner: LifecycleOwner) {
 
-    private var notesFilesManager: NotesFilesManager
-    private var isRecordingStarted: Boolean = false
-    private var notesRecorderManager: NotesRecorderManager
+    private lateinit var removeButton: ImageButton
+    private var notesFilesManager: NotesFilesManager = NotesFilesManager()
+    var isRecordingStarted: Boolean = false
+    var notesRecorderManager: NotesRecorderManager
     var speechManager: SpeechManager = SpeechManager(context)
+    var speechManager2: SpeechManager = SpeechManager(context)
+    var speechManager3: SpeechManager = SpeechManager(context)
     private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<String> = ArrayList()
@@ -34,6 +44,7 @@ class NotesManager(context: Context, val activity: NotesActivity) {
     private var speech: SpeechRecognizer
     private var recognizerIntent: Intent
     var addNoteStarted: Boolean = false
+    var removeNoteStarted: Boolean = false
     var addNoteMessage: Boolean = false
     private var activityContext = context
     private lateinit var addButton: ImageButton
@@ -41,7 +52,6 @@ class NotesManager(context: Context, val activity: NotesActivity) {
     var noteTitle = ""
 
     init {
-        notesFilesManager = NotesFilesManager()
         notesRecorderManager =
             NotesRecorderManager(activityContext, activity, noteTitle)
         preferences = PreferencesManager(activityContext)
@@ -85,46 +95,63 @@ class NotesManager(context: Context, val activity: NotesActivity) {
             }
             index++
         }
-        adapter = NotesListAdapter(context, arrayList, this)
+        adapter = NotesListAdapter(context, arrayList)
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    fun handlePlayStopButton(playStopNotesButton: ImageButton) {
-        this.playStopButton = playStopNotesButton
 
-        if(!addNoteMessage && !addNoteStarted) {
+    /**
+     * Function to play or stop sound from .mp3 existing file
+     * @param playStopNotesButton - button that enables to stop/play sound if any item was selected
+     * @param removeNoteButton - button clicked to start removing process
+     * @param addButton - button to add note
+     */
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun handlePlayStopButton(playStopNotesButton: ImageButton, addButton: ImageButton, removeNoteButton: ImageButton) {
+        this.playStopButton = playStopNotesButton
+        if((addNoteStarted && !addNoteMessage) || removeNoteStarted){
+            if (notesRecorderManager.mMediaPlayer?.isPlaying == true) {
+                notesRecorderManager.stopSound()
+                playStopButton.setImageResource(R.drawable.ic_play)
+            }
+        }else if (!addNoteMessage && !addNoteStarted) {
             if (notesRecorderManager.mMediaPlayer?.isPlaying == true) {
                 notesRecorderManager.stopSound()
                 playStopButton.setImageResource(R.drawable.ic_play)
             } else {
                 if (adapter?.getItemSelected() != null) {
-                    println("JEST SELECTED")
                     playStopButton.setImageResource(R.drawable.ic_stop)
                     notesRecorderManager.playSound(adapter?.getItemSelected()!!)
                 }
             }
-        }
-            if (addNoteMessage && !addNoteStarted) {
+        }else if (addNoteMessage && !addNoteStarted) {
                 playStopButton.setImageResource(R.drawable.ic_play)
                 if (isRecordingStarted) {
                     notesRecorderManager.stopRecording()
+                    isRecordingStarted = false
+                    removeNoteButton.setImageResource(R.drawable.ic_remove_red)
+                    removeNoteButton.clearColorFilter()
+                    removeNoteButton.isClickable = true
+                    removeNoteButton.isEnabled = true
+                    addButton.clearColorFilter()
+                    addButton.isClickable = true
+                    addButton.isEnabled = true
+                    VibrateUtil(activityContext).vibrate(300)
                     addNoteMessage = false
                     addNoteStarted = false
-                    isRecordingStarted = false
                     notesFilesManager.writeToFile(noteTitle, activityContext)
-                    val files = notesFilesManager.readFile(activityContext)
+                    val file = notesFilesManager.readFile(activityContext)
 
                     var indexPrevious = 0
                     var index = 0
-                    files.forEach { char: Char ->
+                    file.forEach { char: Char ->
                         if (char == ',') {
-                            arrayList.add(files.substring(indexPrevious, index))
+                            arrayList.add(file.substring(indexPrevious, index))
                             indexPrevious = index + 1
                         }
                         index++
                     }
-                    adapter = NotesListAdapter(activityContext, arrayList, this)
+                    adapter = NotesListAdapter(activityContext, arrayList)
 
                     activity.finish()
                     activity.startActivity(activity.intent)
@@ -132,12 +159,27 @@ class NotesManager(context: Context, val activity: NotesActivity) {
                     notesRecorderManager =
                         NotesRecorderManager(activityContext, activity, noteTitle)
                     notesRecorderManager.startRecording()
+
+                    removeNoteButton.isClickable = false
+                    removeNoteButton.isEnabled = false
+                    removeNoteButton.setColorFilter(R.color.gray)
+
+                    addButton.isClickable = false
+                    addButton.isEnabled = false
+                    addButton.setImageResource(R.drawable.ic_add_note)
+                    addButton.setColorFilter(R.color.gray)
+
+                    VibrateUtil(activityContext).vibrate(300)
                     playStopButton.setImageResource(R.drawable.ic_stop)
                     isRecordingStarted = true
                 }
             }
     }
 
+    /**
+     * Handles results of input speech: result text given when new note title is added
+     * or title is deleted
+     */
     fun handleResults(results: Bundle?, playStopNotesButton: ImageButton) {
         speechManager.isFinishedSpeaking = 0
         val matches = results!!.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -149,17 +191,40 @@ class NotesManager(context: Context, val activity: NotesActivity) {
         }
         this.playStopButton = playStopNotesButton
         playStopButton.setImageResource(R.drawable.ic_play)
-        returnedText = text
+        returnedText = text.lowercase(Locale.getDefault())
         if (addNoteStarted){
-            speak(activityContext.getString(R.string.note_title_is) + returnedText +
-                    activityContext.getString(R.string.press_again_note))
-            noteTitle = returnedText
-            while (speechManager.isFinishedSpeaking != 1) {
-                //wait for speech manager to finish speaking
+            if(arrayList.contains(returnedText)) {
+                speak(activityContext.getString(R.string.note_already_exist))
+            }else if(returnedText.length > 30){
+                speak(activityContext.getString(R.string.note_too_long_title))
+            }else {
+                speak(
+                    activityContext.getString(R.string.note_title_is) + returnedText +
+                            activityContext.getString(R.string.press_again_note)
+                )
+                noteTitle = returnedText
+                while (speechManager.isFinishedSpeaking != 1) {
+                    //wait for speech manager to finish speaking
+                }
+                addNoteMessage = true
+                addNoteStarted = false
+                return
             }
-            addNoteMessage = true
-            addNoteStarted = false
-            return
+        }else if(removeNoteStarted){
+            if(arrayList.contains(returnedText)){
+                arrayList.remove(returnedText)
+                notesFilesManager.deleteFile(returnedText, activityContext)
+                speechManager3.speakWithObservable(activityContext.getString(R.string.removed_note_title_is)+ returnedText)
+                speechManager3.finished.observe(lifecycleOwner, {
+                    if(it){
+                        adapter = NotesListAdapter(activityContext, arrayList)
+                        activity.finish()
+                        activity.startActivity(activity.intent)
+                    }
+                })
+            }else{
+                speak(activityContext.getString(R.string.note_doesnt_exist))
+            }
         }
     }
 
@@ -187,14 +252,65 @@ class NotesManager(context: Context, val activity: NotesActivity) {
     /**
      * Function to handle the beginning of adding new note
      */
-    fun handleAddButton(addButton: ImageButton){
+    fun handleAddButton(addButton: ImageButton, removeNoteButton: ImageButton){
         this.addButton = addButton
-            if(!addNoteStarted){
+        if (notesRecorderManager.mMediaPlayer?.isPlaying == true) {
+            notesRecorderManager.stopSound()
+            playStopButton.setImageResource(R.drawable.ic_play)
+        }
+        if (!isRecordingStarted) {
+            if (!addNoteStarted) {
+                removeNoteButton.isClickable = false
+                removeNoteButton.isEnabled = false
+                removeNoteButton.setImageResource(R.drawable.ic_remove_yellow)
+                removeNoteButton.setColorFilter(R.color.gray)
                 speak(activityContext.getString(R.string.notes_add_note_start))
-                while (speechManager.isFinishedSpeaking != 1){
+                while (speechManager.isFinishedSpeaking != 1) {
                     //wait for speech manager to finish speaking
                 }
                 addNoteStarted = true
+
+            } else {
+                addNoteStarted = false
+                removeNoteButton.isClickable = true
+                removeNoteButton.isEnabled = true
+                removeNoteButton.setImageResource(R.drawable.ic_remove_red)
+                removeNoteButton.clearColorFilter()
+                speak(activityContext.getString(R.string.note_exit_add))
+
             }
+        }
+    }
+
+    /**
+     * Function to handle the beginning of removing note
+     */
+    fun handleRemoveButton(removeNoteButton: ImageButton, addButton: ImageButton) {
+        this.removeButton = removeNoteButton
+
+        if (notesRecorderManager.mMediaPlayer?.isPlaying == true) {
+            notesRecorderManager.stopSound()
+            playStopButton.setImageResource(R.drawable.ic_play)
+        }
+
+        if (!isRecordingStarted) {
+            if (!removeNoteStarted) {
+                addButton.isClickable = false
+                addButton.isEnabled = false
+                addButton.setColorFilter(R.color.disabled_gray)
+                speak(activityContext.getString(R.string.notes_remove_start))
+
+                removeNoteStarted = true
+
+            } else {
+                removeNoteStarted = false
+                addButton.isClickable = true
+                addButton.isEnabled = true
+                addButton.clearColorFilter()
+
+                speak(activityContext.getString(R.string.note_exit_remove))
+
+            }
+        }
     }
 }

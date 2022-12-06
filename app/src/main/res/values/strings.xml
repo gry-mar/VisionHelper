@@ -17,8 +17,8 @@
         On the top of the screen there are note titles that you have added before.
         Select the note you want to hear by pressing one of the note title.
         After selecting, press the green circle on the left to play the note.
-        If you want to stop assistant to speak, press the red circle on the right.
         If you want to add a new note, press the yellow circle with plus sign.
+        If you want to remove existing note, press the red button with minus sign.
         Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
     </string>
 
@@ -76,8 +76,14 @@
 
 
     <string name="note_title_is">Note title is : </string>
-    <string name="press_again_note">Now press and hold it again to record the voice note.</string>
+    <string name="press_again_note">Now press the green circle once and start recording voice note.</string>
 
-    <string name="notes_add_note_start">To add new note hold add button and say title of the note.</string>
-
+    <string name="notes_add_note_start">To add new note hold the yellow button and say title of the note.</string>
+    <string name="notes_remove_start">To remove note hold the red button and say title of the note.</string>
+    <string name="removed_note_title_is"> has been removed.</string>
+    <string name="note_exit_add">Exiting note add</string>
+    <string name="note_already_exist">Note with such title already exists.</string>
+    <string name="note_doesnt_exist">Note with such title does not exist.</string>
+    <string name="note_exit_remove">Exiting note remove</string>
+    <string name="note_too_long_title">The title is too long. It should have below 30 characters.</string>
 </resources>

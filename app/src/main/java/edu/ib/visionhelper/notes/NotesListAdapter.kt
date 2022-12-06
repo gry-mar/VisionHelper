@@ -13,11 +13,11 @@ import androidx.annotation.RequiresApi
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
+
 @RequiresApi(Build.VERSION_CODES.S)
 class NotesListAdapter(
     private val context: Context,
     private val arrayList: java.util.ArrayList<String>,
-    private val viewManager: NotesManager,
 ) : BaseAdapter() {
 
     private lateinit var noteTitle: TextView
@@ -62,7 +62,7 @@ class NotesListAdapter(
         val title = holder.title.text
 
         if (title == lastSelected) {
-            if (isSelected == false) {
+            if (!isSelected) {
                 convertView.setBackgroundColor(Color.BLUE)
                 itemSelected = arrayList[position].replace(' ', '_')
                 isSelected = true
@@ -81,17 +81,13 @@ class NotesListAdapter(
             val selectedItem = arrayList[item]
 
             lastSelected = selectedItem
-            viewManager.speak(arrayList[position])
-            while (viewManager.speechManager.isFinishedSpeaking == 0) {
-            }
             notifyDataSetChanged()
-
         }
         return convertView
     }
 
     class ViewHolderContact(itemView: View) {
-        val title = itemView.findViewById<TextView>(R.id.notetitle)
+        val title: TextView = itemView.findViewById(R.id.notetitle)
     }
 
 
