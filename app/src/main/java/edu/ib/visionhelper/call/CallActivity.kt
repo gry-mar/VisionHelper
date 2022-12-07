@@ -12,7 +12,10 @@ import edu.ib.visionhelper.R
 import edu.ib.visionhelper.utils.VibrateUtil
 import kotlinx.android.synthetic.main.activity_call.*
 
-
+/**
+ * Activity that is responsible for making phone calls and
+ * contact list management (from UI side)
+ */
 class CallActivity : AppCompatActivity(), RecognitionListener {
 
     private lateinit var listView: ListView
@@ -158,6 +161,10 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         viewManager.returnedText = errorMessage
     }
 
+    /**
+     * Method that returns readable error description
+     * @param error - Integer error code
+     */
     private fun getErrorText(error: Int): String {
         val message = when (error) {
             SpeechRecognizer.ERROR_AUDIO -> "Audio recording error"
@@ -187,6 +194,10 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         Log.i("logTag", "on event")
     }
 
+    /**
+     * Function that handles adding contact number and redirects to
+     * appropriate methods in View Manager
+     */
     private fun handleContactNumberAdd() {
         if (viewManager.addContactNumber.value == true) {
             keyboardLayout.visibility = View.VISIBLE

@@ -6,7 +6,18 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 
+/**
+ * Class responsible for text recognition from image
+ * Uses TextRecognition provided by ML Kit
+ */
 class TextRecognizer(private val onTextFound: (String) -> Unit) {
+
+    /**
+     * Method responsible for text recognition
+     * @param image - input image, in this case represents given image from camera view
+     * @param rotationDegrees - integer value describing image degrees rotation
+     * @param onResult
+     */
     fun recognizeImageText(image: Image, rotationDegrees: Int, onResult: (Boolean) -> Unit) {
         val inputImage = InputImage.fromMediaImage(image, rotationDegrees)
         TextRecognition.getClient()
@@ -22,6 +33,10 @@ class TextRecognizer(private val onTextFound: (String) -> Unit) {
             }
     }
 
+    /**
+     * Method that joins found text blocks out of recognized text from camera
+     * @param text: Text - recognized text
+     */
     private fun processTextFromImage(text: Text) {
         text.textBlocks.joinToString {
             it.text.lines().joinToString(" ")
@@ -32,6 +47,9 @@ class TextRecognizer(private val onTextFound: (String) -> Unit) {
         }
     }
 
+    /**
+     * Specifies TAG for logging
+     */
     companion object {
         private val TAG = TextRecognizer::class.java.name
     }

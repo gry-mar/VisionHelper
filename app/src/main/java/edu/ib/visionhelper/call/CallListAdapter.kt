@@ -2,16 +2,17 @@ package edu.ib.visionhelper.call
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.telecom.Call
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import edu.ib.visionhelper.R
-import edu.ib.visionhelper.manager.SpeechManager
 import edu.ib.visionhelper.manager.TextSizePreferencesManager
 
+/**
+ * Adapter for contact list
+ */
 class CallListAdapter(
    private val context: Context,
     private val arrayList: ArrayList<CallListElement>,

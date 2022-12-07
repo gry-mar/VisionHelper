@@ -17,6 +17,9 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
+/**
+ * Class that manages TextToSpeech
+ */
 class SpeechManager(var context: Context) : TextToSpeech.OnInitListener {
     private var textToSpeech: TextToSpeech
     private var preferences: PreferencesManager? = null
