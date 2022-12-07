@@ -51,6 +51,7 @@ class CallManager(
         private set
     var addContactNumber = MutableLiveData(false)
         private set
+    var isActionClosed = false
     private var callFilesManager: CallFilesManager = CallFilesManager()
     private var temporaryContact = CallListElement("", 0)
     private lateinit var callButton: ImageButton
@@ -64,6 +65,7 @@ class CallManager(
         longPressActivated.value = true
         removeContactStarted.value = false
         updateUIDelete.value = false
+
 
         TextToSpeech.OnInitListener {
             if (preferences!!.callFirstTimeLaunched == 0) {
@@ -96,8 +98,8 @@ class CallManager(
      * or name of contact to be deleted
      * (name and then number)
      */
-    fun handleResults(results: Bundle?) {
-
+    fun handleResults(results: Bundle?, addButton: ImageButton) {
+        addButton.isClickable = false
         val matches = results!!.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         var text = ""
         if (matches != null) {
@@ -120,10 +122,13 @@ class CallManager(
                 )
                 speechManager4.finished.observe(lifecycleOwner, {
                     if (it) {
+                        addButton.isClickable = true
                         temporaryContact.contactName = returnedText
                         addContactNumber.value = true
                         longPressActivated.value = false
-                        callButton.isClickable = true
+                        if(!isActionClosed) {
+                            callButton.isClickable = true
+                        }
                         speechManager.finished.value = false
                         removeButton.isClickable = true
                     }
@@ -135,6 +140,7 @@ class CallManager(
                     if (it) {
                         longPressActivated.value = true
                         callButton.isClickable = false
+                        addButton.isClickable = true
                     }
                 })
                 return
@@ -167,10 +173,12 @@ class CallManager(
                 speechManagerSecond.finished.observe(lifecycleOwner, {
                     if (it) {
                         call()
+                        addButton.isClickable = true
                     }
                 })
             } else {
                 speak(activityContext.getString(R.string.contact_no_contact) + returnedText, 2)
+                addButton.isClickable = true
             }
         }
     }
@@ -260,6 +268,7 @@ class CallManager(
         addButton: ImageButton,
         removeButton: ImageButton
     ) {
+        isActionClosed = false
         this.callButton = callButton
         this.addButton = addButton
         this.removeButton = removeButton
@@ -290,6 +299,7 @@ class CallManager(
                     longPressActivated.value = true
                     speechManagerSecond.finished.value = false
                     removeButton.isClickable = true
+                    isActionClosed = true
 
                 }
             })
@@ -344,6 +354,7 @@ class CallManager(
      */
     fun handleRemoveContact(callButton: ImageButton, removeButton: ImageButton, addButton: ImageButton) {
         this.callButton = callButton
+        isActionClosed = false
         this.removeButton = removeButton
         this.addButton = addButton
         longPressActivated.value = false
@@ -369,6 +380,7 @@ class CallManager(
                     updateUIDelete.value = false
                     longPressActivated.value = true
                     addButton.isClickable = true
+                    isActionClosed = true
 
                 }
             })
