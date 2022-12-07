@@ -15,15 +15,37 @@
         android:orientation="vertical"
         >
 
-    <ImageButton
-        android:id="@+id/helperCallButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16sp"
-        android:layout_gravity="left"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_helper"
-         />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/helperCallButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:paddingTop="16sp"
+                android:paddingBottom="16sp"
+                android:paddingLeft="16sp"
+                android:paddingRight="80dp"
+                android:src="@drawable/ic_helper"
+                android:background="@color/transparent"
+                />
+
+            <ImageButton
+                android:id="@+id/btnBackFromCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:paddingTop="16sp"
+                android:paddingBottom="16sp"
+                android:paddingRight="16sp"
+                android:paddingLeft="80dp"
+                android:src="@drawable/ic_arrow"
+                android:background="@color/transparent"
+                />
+
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listContacts"

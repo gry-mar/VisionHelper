@@ -1,11 +1,14 @@
 package edu.ib.visionhelper.zoomview
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.widget.ImageButton
 import android.widget.TextView
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
+import edu.ib.visionhelper.calculator.CalculatorActivity
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
 
@@ -83,6 +86,11 @@ class ZoomViewActivity : AppCompatActivity() {
             zoomViewManager.confirmTextSize()
             speechManager.speakOut(getString(R.string.confirm_zoomed_text) +
                     zoomViewManager.textSize.toInt().toString())
+        }
+
+        val btnBack = findViewById<ImageButton>(R.id.btnBackFromZoom)
+        btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
         }
 
     }

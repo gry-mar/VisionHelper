@@ -6,18 +6,42 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".notes.NotesActivity">
 
-    <ImageButton
-        android:id="@+id/helperNotesButton"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16sp"
-        android:layout_gravity="left"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_helper"
-        app:tint="@color/blue" />
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/helperNotesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingTop="16sp"
+            android:paddingBottom="16sp"
+            android:paddingLeft="16sp"
+            android:paddingRight="80dp"
+            android:src="@drawable/ic_helper"
+            android:background="@color/transparent"
+            />
+
+        <ImageButton
+            android:id="@+id/btnBackFromNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingTop="16sp"
+            android:paddingBottom="16sp"
+            android:paddingRight="16sp"
+            android:paddingLeft="80dp"
+            android:src="@drawable/ic_arrow"
+            android:background="@color/transparent"
+            />
+
+    </LinearLayout>
+
         <ListView
             android:layout_marginHorizontal="42sp"
             android:id="@+id/listNotes"

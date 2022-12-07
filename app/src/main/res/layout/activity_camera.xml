@@ -9,17 +9,37 @@
     android:gravity="center"
     tools:context=".camera.CameraActivity">
 
-    <ImageButton
-        android:id="@+id/helperCameraButton"
-        android:layout_marginBottom="-16sp"
-        android:padding="16sp"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:src="@drawable/ic_helper"
-        android:background="@color/transparent"
-        />
+        android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/helperCameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingTop="16sp"
+            android:paddingBottom="16sp"
+            android:paddingLeft="16sp"
+            android:paddingRight="80dp"
+            android:src="@drawable/ic_helper"
+            android:background="@color/transparent"
+            />
+
+        <ImageButton
+            android:id="@+id/btnBackFromCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:paddingTop="16sp"
+            android:paddingBottom="16sp"
+            android:paddingRight="16sp"
+            android:paddingLeft="80dp"
+            android:src="@drawable/ic_arrow"
+            android:background="@color/transparent"
+            />
+
+    </LinearLayout>
 
     <androidx.camera.view.PreviewView
         android:layout_weight="1"
