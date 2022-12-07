@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
@@ -109,6 +110,12 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
             }
             isFirstSpeech = false
         }
+
+        val btnBack = findViewById<ImageButton>(R.id.btnBackFromCalculator)
+        btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
     }
 
     override fun onRequestPermissionsResult(

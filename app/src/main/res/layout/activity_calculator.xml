@@ -9,16 +9,37 @@
     android:background="@color/black"
     tools:context=".calculator.CalculatorActivity">
 
-
-        <ImageButton
-            android:id="@+id/helperCalculatorButton"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:padding="16sp"
-            android:src="@drawable/ic_helper"
-            android:background="@color/transparent"
-            />
+            android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/helperCalculatorButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingTop="16sp"
+                    android:paddingBottom="16sp"
+                    android:paddingLeft="16sp"
+                    android:paddingRight="80dp"
+                    android:src="@drawable/ic_helper"
+                    android:background="@color/transparent"
+                    />
+
+                <ImageButton
+                    android:id="@+id/btnBackFromCalculator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:paddingTop="16sp"
+                    android:paddingBottom="16sp"
+                    android:paddingRight="16sp"
+                    android:paddingLeft="80dp"
+                    android:src="@drawable/ic_helper"
+                    android:background="@color/transparent"
+                    />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tvEquationCalculator"

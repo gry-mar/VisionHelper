@@ -1,4 +1,5 @@
 package edu.ib.visionhelper.call
+import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
@@ -6,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.utils.VibrateUtil
 import kotlinx.android.synthetic.main.activity_call.*
@@ -117,6 +119,10 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
             }
         })
 
+        val btnBack = findViewById<ImageButton>(R.id.btnBackFromCall)
+        btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     public override fun onDestroy() {

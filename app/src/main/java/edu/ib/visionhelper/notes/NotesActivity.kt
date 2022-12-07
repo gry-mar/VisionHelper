@@ -1,5 +1,6 @@
 package edu.ib.visionhelper.notes
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -10,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ListView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
 import kotlinx.android.synthetic.main.activity_notes.*
 
@@ -87,6 +89,10 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
                 viewManager.stopSpeaking()
             }
         })
+        val btnBack = findViewById<ImageButton>(R.id.btnBackFromNotes)
+        btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

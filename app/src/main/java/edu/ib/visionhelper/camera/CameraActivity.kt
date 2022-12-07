@@ -1,6 +1,7 @@
 package edu.ib.visionhelper.camera
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import edu.ib.visionhelper.MainActivity
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
@@ -64,6 +66,12 @@ class CameraActivity : AppCompatActivity() {
         stopSpeakingButton.setOnClickListener{
             speechManager.stopSpeaking()
         }
+
+        val btnBack = findViewById<ImageButton>(R.id.btnBackFromCamera)
+        btnBack.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
     }
 
     public override fun onDestroy() {
