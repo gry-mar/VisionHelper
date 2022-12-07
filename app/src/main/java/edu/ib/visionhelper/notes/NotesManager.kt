@@ -1,19 +1,14 @@
 package edu.ib.visionhelper.notes
 
 import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
-import android.graphics.BlendMode
-import android.graphics.PorterDuff
 import android.os.*
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LifecycleOwner
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
@@ -36,7 +31,6 @@ class NotesManager(context: Context, val activity: NotesActivity, private val li
     var speechManager: SpeechManager = SpeechManager(context)
     var speechManager2: SpeechManager = SpeechManager(context)
     var speechManager3: SpeechManager = SpeechManager(context)
-    private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<String> = ArrayList()
     var adapter: NotesListAdapter? = null
@@ -66,13 +60,6 @@ class NotesManager(context: Context, val activity: NotesActivity, private val li
                 speechManager.speakOut(context.getString(R.string.notes_helper_text))
                 preferences!!.notesFirstTimeLaunched = 1
             }
-        }
-
-        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
-            Toast.makeText(
-                activityContext,
-                activityContext.getString(R.string.install_google_app), Toast.LENGTH_LONG
-            ).show()
         }
 
         speech.setRecognitionListener(activity)

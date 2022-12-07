@@ -125,7 +125,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBackFromCall)
         btnBack.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 

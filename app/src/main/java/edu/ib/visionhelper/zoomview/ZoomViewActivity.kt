@@ -90,7 +90,7 @@ class ZoomViewActivity : AppCompatActivity() {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBackFromZoom)
         btnBack.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
     }

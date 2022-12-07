@@ -67,7 +67,7 @@ class CameraActivity : AppCompatActivity() {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBackFromCamera)
         btnBack.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
     }

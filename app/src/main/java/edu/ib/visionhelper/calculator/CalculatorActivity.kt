@@ -113,7 +113,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
 
         val btnBack = findViewById<ImageButton>(R.id.btnBackFromCalculator)
         btnBack.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
     }

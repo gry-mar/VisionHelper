@@ -91,7 +91,7 @@ class NotesActivity : AppCompatActivity(), RecognitionListener {
         })
         val btnBack = findViewById<ImageButton>(R.id.btnBackFromNotes)
         btnBack.setOnClickListener{
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
     }
 
