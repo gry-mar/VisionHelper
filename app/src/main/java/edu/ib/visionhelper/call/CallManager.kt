@@ -10,13 +10,11 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import edu.ib.visionhelper.R
 import edu.ib.visionhelper.manager.PreferencesManager
 import edu.ib.visionhelper.manager.SpeechManager
-import edu.ib.visionhelper.manager.SpeechRecognizerManager
 
 /**
  * Manager class to handle CallActivity logic
@@ -34,7 +32,6 @@ class CallManager(
     private var speechManager6: SpeechManager = SpeechManager(context)
     private var speechManager8: SpeechManager = SpeechManager(context)
     var speechManager7: SpeechManager = SpeechManager(context)
-    private var speechRecognizerManager: SpeechRecognizerManager = SpeechRecognizerManager(context)
     private var preferences: PreferencesManager? = null
     var arrayList: ArrayList<CallListElement> = ArrayList()
     var adapter: CallListAdapter? = null
@@ -80,13 +77,6 @@ class CallManager(
             "logTag", "isRecognitionAvailable: " +
                     SpeechRecognizer.isRecognitionAvailable(context)
         )
-
-        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
-            Toast.makeText(
-                activityContext,
-                activityContext.getString(R.string.install_google_app), Toast.LENGTH_LONG
-            ).show()
-        }
 
         speech.setRecognitionListener(activity)
         recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
