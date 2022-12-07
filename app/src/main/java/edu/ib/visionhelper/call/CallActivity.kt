@@ -33,6 +33,7 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
         val addContactButton = findViewById<ImageButton>(R.id.addContactButton)
         val callButton = findViewById<ImageButton>(R.id.callContactButton)
         callButton.setOnLongClickListener {
+            viewManager.isActionClosed = false
                     viewManager.listen()
             true
         }
@@ -183,7 +184,9 @@ class CallActivity : AppCompatActivity(), RecognitionListener {
 
 
     override fun onResults(results: Bundle?) {
-        viewManager.handleResults(results)
+        if(!viewManager.isActionClosed) {
+            viewManager.handleResults(results, addContactButton)
+        }
     }
 
     override fun onPartialResults(partialResults: Bundle?) {
