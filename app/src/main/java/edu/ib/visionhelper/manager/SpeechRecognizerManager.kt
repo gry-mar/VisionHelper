@@ -9,6 +9,9 @@ import android.speech.RecognitionService
 import android.speech.SpeechRecognizer
 
 
+/**
+ * Class responsible for Speech Recognition management
+ */
 class SpeechRecognizerManager(context: Context) {
 
     var isSpeechRecognizerServiceAvailable: Boolean? = null
@@ -16,6 +19,9 @@ class SpeechRecognizerManager(context: Context) {
     private var GOOGLE_RECOGNITION_SERVICE_NAME =
         "com.google.android.googlequicksearchbox/com.google.android.voicesearch.serviceapi.GoogleRecognitionService"
 
+    /**
+     * Function that checks if speech recognizer is available on device
+     */
     fun isSpeechRecognizerAvailable(): Boolean {
         if (isSpeechRecognizerServiceAvailable == null) {
             val isRecognitionAvailable =

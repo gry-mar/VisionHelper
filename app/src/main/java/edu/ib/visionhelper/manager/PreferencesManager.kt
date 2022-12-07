@@ -3,10 +3,16 @@ package edu.ib.visionhelper.manager
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * PreferencesManager that enables to specify if each activity is launched
+ * for the first time
+ * @param context - context of the activity
+ */
 class PreferencesManager (context: Context){
 
     private val APP_PREFERENCES_NAME = "visionHelperPreferences"
-    private val preferences: SharedPreferences = context.getSharedPreferences(APP_PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val preferences: SharedPreferences = context.getSharedPreferences(APP_PREFERENCES_NAME,
+        Context.MODE_PRIVATE)
 
     var mainFirstTimeLaunched: Int
         get() = preferences.getInt("mainLaunch", 0)

@@ -45,7 +45,7 @@ class CallFilesManager {
                     println(line?.substringBeforeLast(";") ?: "")
                     println(line?.substringAfterLast(";")?.toLong() ?: 0)
                     val contactName = line?.substringBeforeLast(";") ?: ""
-                    var contactNumberString = line?.substringAfterLast(";")?.toLong() ?: 111111111
+                    val contactNumberString = line?.substringAfterLast(";")?.toLong() ?: 111111111
                     contactList += CallListElement(contactName, contactNumberString)
                 }
             }

@@ -58,21 +58,19 @@
 
     <string name="contact_name_is">Contact name is : </string>
     <string name="contact_add_success">Contact added successfully</string>
-    <string name="contact_number_too_short">Contact number is too short. Hold button and say contact number again</string>
-    <string name="contact_number_letters">Contact number contains letters. Hold button and say contact number again</string>
     <string name="contact_no_contact">There is no contact named: </string>
     <string name="contact_add_contact_start">To add contact number hold call button and say name of the contact</string>
     <string name="contact_is_already_add">There is such contact already. Press again to add contact name</string>
     <string name="contact_delete_again">If you want to delete contact. Repeat deleting process again.</string>
-    <string name="contact_click_to_add_number">Now click call button to open keyboard and add contact number. Then press green  button witch checkmark to confirm choice</string>
+    <string name="contact_click_to_add_number">Now click call button to open keyboard and add contact number. Then press green button with checkmark to confirm</string>
     <string name="contact_delete">Deleting contact named  </string>
     <string name="contact_exit_add">Exiting contact add</string>
     <string name="contact_exit_remove">Exiting contact remove</string>
     <string name="contact_succes_add">Successfully added contact named: </string>
     <string name="contact_succes_add_number"> with number: </string>
-    <string name="contact_number_wrong_length">Contact number has inappropriate length. Enter again </string>
+    <string name="contact_number_wrong_length">Inappropriate length of contact. Enter again </string>
     <string name="contact_remove_start">To remove contact number hold call button and say name of the contact</string>
-    <string name="press_again">No press again to add contact number</string>
+    <string name="press_again">Now press again to add contact number</string>
 
 
     <string name="note_title_is">Note title is : </string>
