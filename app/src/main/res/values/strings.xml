@@ -23,8 +23,7 @@
     </string>
 
     <string name="camera_helper_text">This view allows you to find the text by using camera which you wish to be read by assistant.
-        Selected area is defined by the red rectangle at the center of the camera.
-        Hold the selected area at the text you want to be played.
+        Hold the phone at the text you want to be played.
         If there are problems with detecting the text, try to improve the focus or set the flashlight on.
         Press the green rounded button on the left to play the note.
         If you want to stop assistant to speak, press the red rounded button on the right.
@@ -34,8 +33,7 @@
     <string name="call_helper_text">This view allows you to call the contact from the list or add a new one by speaking.
         On the top of the screen there are contacts that you have added before,
         but at the beginning there is an empty area instead.
-        Select the contact you want to call by pressing at one on the list.
-        After selecting, press the big blue circle to call.
+        To call contact press and hold blue button and say name of the contact.
         If you want to add a new contact, press the green circle with plus sign and tell the assistant its number and name.
         Remember that you can always play this message again just by pressing the blue circle with question mark at the left top of the screen.
     </string>
