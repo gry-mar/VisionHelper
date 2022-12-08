@@ -53,13 +53,6 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         speechRecognizerManager = SpeechRecognizerManager(this)
         speech = SpeechRecognizer.createSpeechRecognizer(this)
 
-//        if (!speechRecognizerManager.isSpeechRecognizerAvailable()) {
-//            Toast.makeText(
-//                applicationContext,
-//                getString(R.string.install_google_app),
-//                Toast.LENGTH_LONG
-//            ).show()
-//        } else {
             finalText = findViewById(R.id.tvResultCalculator)
             btnMicrophone = findViewById(R.id.btnSoundCalculator)
             returnedText = findViewById(R.id.tvEquationCalculator)
@@ -83,7 +76,7 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
                     arrayOf(android.Manifest.permission.RECORD_AUDIO), permission)
                 true
             }
-       // }
+
         speechManager = SpeechManager(this)
         preferences = PreferencesManager(applicationContext)
 
@@ -159,30 +152,18 @@ class CalculatorActivity : AppCompatActivity(), RecognitionListener {
         TODO("Not yet implemented")
     }
 
-    /**
-     * Function that prints out information at the begining of voice recognition
-     */
     override fun onBeginningOfSpeech() {
         Log.i(logTag, "onBeginningOfSpeech")
     }
 
-    /**
-     * Function that prints out information during the voice recognition
-     */
     override fun onRmsChanged(p0: Float) {
         Log.i(logTag, "DuringRecognition")
     }
 
-    /**
-     * Function that prints out information at the end of voice recognition
-     */
     override fun onEndOfSpeech() {
         Log.i(logTag, "onEndOfSpeech")
     }
 
-    /**
-     * Function that prints out error when any occurs
-     */
     override fun onError(error: Int) {
         val errorMessage: String = getErrorText(error)
         Log.d(logTag, "FAILED $errorMessage")

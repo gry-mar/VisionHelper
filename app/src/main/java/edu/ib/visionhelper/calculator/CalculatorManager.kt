@@ -5,22 +5,37 @@ import androidx.core.text.isDigitsOnly
 
 class CalculatorManager {
 
+    /**
+     * Function that adds tweo numbers
+     */
     fun sum(prevNum: Int, nextNum: Int): Int {
         return prevNum + nextNum
     }
 
+    /**
+     * Function that substracts two numbers
+     */
     fun substract(prevNum: Int, nextNum: Int): Int {
         return prevNum - nextNum
     }
 
+    /**
+     * Function that divides two numbers
+     */
     fun divide(prevNum: Int, nextNum: Int): Int {
         return (prevNum / nextNum)
     }
 
+    /**
+     * Function that multiplies two numbers
+     */
     fun multiply(prevNum: Int, nextNum: Int): Int {
         return prevNum * nextNum;
     }
 
+    /**
+     * Function that separates every item in a text and makes an array
+     */
     fun textSeparator(str: String): MutableList<String> {
         var delimiter = " "
         val parts = str.split(delimiter)
@@ -58,6 +73,9 @@ class CalculatorManager {
         return string
     }
 
+    /**
+     * Function that checks every item and changes text to digit eventually
+     */
     fun textToDigitsChanger(arrayString: MutableList<String>): MutableList<String> {
 
         for (i in 0..arrayString.size - 1)
@@ -66,6 +84,9 @@ class CalculatorManager {
         return arrayString
     }
 
+    /**
+     * Function that changes text to digit (just in case if a number is recognized as a text)
+     */
     fun changeDigitsToTextAutomatic(arrayString: MutableList<String>, index: Int) {
         when (arrayString.get(index)) {
             "zero" -> arrayString.set(index, "0")
@@ -93,6 +114,9 @@ class CalculatorManager {
         }
     }
 
+    /**
+     * Function that analizes text, recognizes proper sign and makes proper math operation
+     */
     fun textAnalizer(arrayString: MutableList<String>): Int {
         var numberFirst = 0
         var numberSecond = 0
